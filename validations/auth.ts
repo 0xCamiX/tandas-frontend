@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 
-const SigninFormSchema = v.object({
+export const SigninFormSchema = v.object({
   email: v.pipe(
     v.string('Your email must be a string.'),
     v.nonEmpty('Please enter your email.'),
