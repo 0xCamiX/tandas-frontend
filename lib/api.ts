@@ -120,8 +120,8 @@ export async function loginUserService(userData: object): Promise<LoginUserRespo
       return {
         success: false,
         error: {
-          code: data.error?.code || String(response.status),
-          message: data.error?.message || 'Login failed',
+          code: data.code || String(response.status),
+          message: data.message,
         },
       }
     }
@@ -139,8 +139,8 @@ export async function loginUserService(userData: object): Promise<LoginUserRespo
     return {
       success: false,
       error: {
-        code: data.error?.code || 'UNKNOWN_ERROR',
-        message: data.error?.message || 'Login failed',
+        code: data.code || 'UNKNOWN_ERROR',
+        message: data.message,
       },
     }
   } catch {

@@ -106,7 +106,7 @@ export async function loginUserAction(
   const userData = {
     email: validatedFields.output.email,
     password: validatedFields.output.password,
-    callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/callback`,
+    callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}`,
   }
 
   const response = await loginUserService(userData)
