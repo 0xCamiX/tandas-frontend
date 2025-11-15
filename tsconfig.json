@@ -24,22 +24,22 @@
     ],
     "paths": {
       "@/*": [
-        "./src/*"
+        "./*"
       ],
       "@/components/*": [
-        "./src/components/*"
+        "./components/*"
       ],
       "@/lib/*": [
-        "./src/lib/*"
+        "./lib/*"
       ],
       "@/app/*": [
-        "./src/app/*"
+        "./app/*"
       ],
       "@/styles/*": [
-        "./src/styles/*"
+        "./styles/*"
       ],
       "@/validations/*": [
-        "./src/validations/*"
+        "./validations/*"
       ]
     }
   },
@@ -48,8 +48,7 @@
     "bun.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/**/*.css"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
