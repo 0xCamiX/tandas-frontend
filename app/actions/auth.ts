@@ -161,7 +161,7 @@ export async function loginUserAction(
     const cookieStore = await cookies()
     const config = getCookieConfig()
     cookieStore.set('jwt', response.data.token, config)
-    redirect('dashboard')
+    redirect('/dashboard')
   }
 
   return {
