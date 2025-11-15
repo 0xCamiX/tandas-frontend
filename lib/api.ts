@@ -8,6 +8,19 @@ type User = {
   updatedAt: string
 }
 
+export interface RegisterUserData {
+  username: string
+  email: string
+  password: string
+  callbackUrl: string
+}
+
+export interface LoginUserData {
+  email: string
+  password: string
+  callbackURL: string
+}
+
 type RegisterUserSuccess = {
   success: true
   data: {
@@ -44,7 +57,9 @@ type LoginUserError = {
 
 export type LoginUserResponse = LoginUserSuccess | LoginUserError
 
-export async function registerUserService(userData: object): Promise<RegisterUserResponse> {
+export async function registerUserService(
+  userData: RegisterUserData,
+): Promise<RegisterUserResponse> {
   const url = `${process.env.BACKEND_URL}/api/auth/sign-up/email`
 
   try {
@@ -129,7 +144,7 @@ export async function registerUserService(userData: object): Promise<RegisterUse
   }
 }
 
-export async function loginUserService(userData: object): Promise<LoginUserResponse> {
+export async function loginUserService(userData: LoginUserData): Promise<LoginUserResponse> {
   const url = `${process.env.BACKEND_URL}/api/auth/sign-in/email`
 
   try {
