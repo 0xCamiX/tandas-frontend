@@ -1,37 +1,46 @@
-import { actions } from '@/app/actions'
+import { redirect } from 'next/navigation'
 import { AccountInfo } from '@/components/dashboard/account-info'
 import { HeaderProfile } from '@/components/dashboard/header-profile'
 import { ProgressSection } from '@/components/dashboard/progress-section'
 import { StatsCards } from '@/components/dashboard/stats-cards'
+import {
+  getCurrentUserService,
+  getUserProgressService,
+  getUserStatsService,
+} from '@/lib/services/user.service'
 
 export default async function DashboardPage() {
-  const [user, stats, progress] = await Promise.all([
-    actions.user.getCurrentUserAction(),
-    actions.user.getUserStatsAction(),
-    actions.user.getUserProgressAction(),
+  const [userResponse, statsResponse, progressResponse] = await Promise.all([
+    getCurrentUserService(),
+    getUserStatsService(),
+    getUserProgressService(),
   ])
 
-  if (!user) {
-    return <div>Error al cargar los datos del usuario</div>
+  if (!userResponse.success) {
+    redirect('/signin')
   }
 
-  const mockStats = stats || {
-    totalEnrollments: 1,
-    totalCompletions: 0,
-    totalQuizAttempts: 0,
-    averageQuizScore: 0,
-  }
+  const user = userResponse.data
 
-  const mockProgress =
-    progress.length > 0
-      ? progress
+  const stats = statsResponse.success
+    ? statsResponse.data
+    : {
+        totalEnrollments: 0,
+        totalCompletions: 0,
+        totalQuizAttempts: 0,
+        averageQuizScore: 0,
+      }
+
+  const progress =
+    progressResponse.success && progressResponse.data.length > 0
+      ? progressResponse.data
       : [
           {
-            courseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            courseTitle: 'Sedimentación',
-            progress: 75.5,
-            completedModules: 3,
-            totalModules: 4,
+            courseId: '',
+            courseTitle: 'No hay progreso',
+            progress: 0,
+            completedModules: 0,
+            totalModules: 0,
             completedAt: null,
           },
         ]
@@ -39,8 +48,8 @@ export default async function DashboardPage() {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
       <HeaderProfile email={user.email} image={user.image} name={user.name} />
-      <StatsCards stats={mockStats} />
-      <ProgressSection progress={mockProgress} />
+      <StatsCards stats={stats} />
+      <ProgressSection progress={progress} />
       <AccountInfo user={user} />
     </div>
   )
