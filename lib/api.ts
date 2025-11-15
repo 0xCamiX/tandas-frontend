@@ -26,12 +26,6 @@ type RegisterUserError = {
 
 export type RegisterUserResponse = RegisterUserSuccess | RegisterUserError
 
-type Session = {
-  id: string
-  userId: string
-  expiresAt: string
-}
-
 type LoginUserSuccess = {
   success: true
   data: {
