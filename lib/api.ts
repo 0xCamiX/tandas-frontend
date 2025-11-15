@@ -54,26 +54,58 @@ export async function registerUserService(userData: object): Promise<RegisterUse
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(userData),
+      credentials: 'include', // Importante para recibir cookies
     })
 
     const data = await response.json()
+
+    // Obtener el token del header set-auth-token (Better Auth con plugin Bearer)
+    const token = response.headers.get('set-auth-token')
 
     if (!response.ok) {
       return {
         success: false,
         error: {
-          code: data.code || String(response.status),
-          message: data.message || 'Registration failed',
+          code: data.code || data.error?.code || String(response.status),
+          message: data.message || data.error?.message || 'Registration failed',
         },
       }
     }
 
+    // Si tenemos token del header y datos del usuario del body
+    if (token && data.user) {
+      return {
+        success: true,
+        data: {
+          token: token,
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            image: data.user.image,
+            emailVerified: data.user.emailVerified,
+            createdAt: data.user.createdAt,
+            updatedAt: data.user.updatedAt,
+          },
+        },
+      }
+    }
+
+    // Fallback: si el token viene en el body (por si acaso)
     if (data.token && data.user) {
       return {
         success: true,
         data: {
           token: data.token,
-          user: data.user,
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            image: data.user.image,
+            emailVerified: data.user.emailVerified,
+            createdAt: data.user.createdAt,
+            updatedAt: data.user.updatedAt,
+          },
         },
       }
     }
@@ -81,11 +113,12 @@ export async function registerUserService(userData: object): Promise<RegisterUse
     return {
       success: false,
       error: {
-        code: data.code || 'UNKNOWN_ERROR',
-        message: data.message || 'Registration failed',
+        code: data.code || data.error?.code || 'UNKNOWN_ERROR',
+        message: data.message || data.error?.message || 'Registration failed',
       },
     }
-  } catch {
+  } catch (error) {
+    console.error('Registration error:', error)
     return {
       success: false,
       error: {
@@ -106,25 +139,57 @@ export async function loginUserService(userData: object): Promise<LoginUserRespo
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(userData),
+      credentials: 'include', // Importante para recibir cookies
     })
 
     const data = await response.json()
+
+    // Obtener el token del header set-auth-token (Better Auth con plugin Bearer)
+    const token = response.headers.get('set-auth-token')
 
     if (!response.ok) {
       return {
         success: false,
         error: {
-          code: data.code || String(response.status),
-          message: data.message,
+          code: data.code || data.error?.code || String(response.status),
+          message: data.message || data.error?.message || 'Login failed',
         },
       }
     }
 
+    // Si tenemos token del header y datos del usuario del body
+    if (token && data.user) {
+      return {
+        success: true,
+        data: {
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            image: data.user.image,
+            emailVerified: data.user.emailVerified,
+            createdAt: data.user.createdAt,
+            updatedAt: data.user.updatedAt,
+          },
+          token: token,
+        },
+      }
+    }
+
+    // Fallback: si el token viene en el body (por si acaso)
     if (data.user && data.token) {
       return {
         success: true,
         data: {
-          user: data.user,
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            image: data.user.image,
+            emailVerified: data.user.emailVerified,
+            createdAt: data.user.createdAt,
+            updatedAt: data.user.updatedAt,
+          },
           token: data.token,
         },
       }
@@ -133,11 +198,12 @@ export async function loginUserService(userData: object): Promise<LoginUserRespo
     return {
       success: false,
       error: {
-        code: data.code || 'UNKNOWN_ERROR',
-        message: data.message,
+        code: data.code || data.error?.code || 'UNKNOWN_ERROR',
+        message: data.message || data.error?.message || 'Login failed',
       },
     }
-  } catch {
+  } catch (error) {
+    console.error('Login error:', error)
     return {
       success: false,
       error: {

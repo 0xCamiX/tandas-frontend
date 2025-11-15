@@ -35,12 +35,13 @@ export async function proxy(request: NextRequest) {
         'Content-Type': 'application/json',
       },
     })
-    const userResponse = await response.json()
-    console.log(userResponse)
+
+    if (!response.ok) {
+      return NextResponse.redirect(new URL('signin', request.url))
+    }
 
     return NextResponse.next()
-  } catch (error) {
-    console.error('Error verifying user authentication:', error)
+  } catch {
     return NextResponse.redirect(new URL('/signin', request.url))
   }
 }
