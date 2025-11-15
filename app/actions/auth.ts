@@ -1,4 +1,7 @@
 'use server'
+
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import * as v from 'valibot'
 import { loginUserService, registerUserService } from '@/lib/api'
 import { type FormState, SigninFormSchema, SignupFormSchema } from '@/validations/auth'
@@ -112,15 +115,16 @@ export async function loginUserAction(
   const response = await loginUserService(userData)
 
   if (response.success) {
-    return {
-      success: true,
-      message: 'Login successful',
-      data: {
-        ...prevState.data,
-        email: fields.email,
-      },
-      backendErrors: undefined,
-    }
+    const cookieStore = await cookies()
+    cookieStore.set('jwt', response?.data?.token ?? '', {
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+      httpOnly: true, // Only accessible by the server
+      domain: process.env.NEXT_PUBLIC_APP_URL ?? 'localhost',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    })
+    redirect('/')
   }
 
   return {

@@ -36,7 +36,7 @@ type LoginUserSuccess = {
   success: true
   data: {
     user: User
-    session: Session
+    token: string
   }
 }
 
@@ -126,12 +126,12 @@ export async function loginUserService(userData: object): Promise<LoginUserRespo
       }
     }
 
-    if (data.user && data.session) {
+    if (data.user && data.token) {
       return {
         success: true,
         data: {
           user: data.user,
-          session: data.session,
+          token: data.token,
         },
       }
     }
