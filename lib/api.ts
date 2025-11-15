@@ -1,4 +1,4 @@
-type User = {
+export type User = {
   id: string
   email: string
   name: string | null
@@ -56,6 +56,55 @@ type LoginUserError = {
 }
 
 export type LoginUserResponse = LoginUserSuccess | LoginUserError
+
+export type UserResponse = {
+  success: true
+  data: User
+} | {
+  success: false
+  error: {
+    code: string
+    message: string
+  }
+}
+
+export type UserStats = {
+  totalEnrollments: number
+  totalCompletions: number
+  totalQuizAttempts: number
+  averageQuizScore: number
+}
+
+export type UserStatsResponse = {
+  success: true
+  data: UserStats
+} | {
+  success: false
+  error: {
+    code: string
+    message: string
+  }
+}
+
+export type CourseProgress = {
+  courseId: string
+  courseTitle: string
+  progress: number
+  completedModules: number
+  totalModules: number
+  completedAt: string | null
+}
+
+export type UserProgressResponse = {
+  success: true
+  data: CourseProgress[]
+} | {
+  success: false
+  error: {
+    code: string
+    message: string
+  }
+}
 
 export async function registerUserService(
   userData: RegisterUserData,
@@ -219,6 +268,169 @@ export async function loginUserService(userData: LoginUserData): Promise<LoginUs
     }
   } catch (error) {
     console.error('Login error:', error)
+    return {
+      success: false,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'Network error. Please try again',
+      },
+    }
+  }
+}
+
+export async function getCurrentUserService(jwt: string): Promise<UserResponse> {
+  const url = `${process.env.BACKEND_URL}/api/v1/users/me`
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: {
+          code: data.error?.code || String(response.status),
+          message: data.error?.message || 'Failed to fetch user',
+        },
+      }
+    }
+
+    if (data.success && data.data) {
+      return {
+        success: true,
+        data: {
+          id: data.data.id,
+          email: data.data.email,
+          name: data.data.name,
+          image: data.data.image,
+          emailVerified: data.data.emailVerified,
+          createdAt: data.data.createdAt,
+          updatedAt: data.data.updatedAt,
+        },
+      }
+    }
+
+    return {
+      success: false,
+      error: {
+        code: 'UNKNOWN_ERROR',
+        message: 'Failed to fetch user',
+      },
+    }
+  } catch {
+    return {
+      success: false,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'Network error. Please try again',
+      },
+    }
+  }
+}
+
+export async function getUserStatsService(jwt: string): Promise<UserStatsResponse> {
+  const url = `${process.env.BACKEND_URL}/api/v1/users/me/stats`
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: {
+          code: data.error?.code || String(response.status),
+          message: data.error?.message || 'Failed to fetch stats',
+        },
+      }
+    }
+
+    if (data.success && data.data) {
+      return {
+        success: true,
+        data: {
+          totalEnrollments: data.data.totalEnrollments,
+          totalCompletions: data.data.totalCompletions,
+          totalQuizAttempts: data.data.totalQuizAttempts,
+          averageQuizScore: data.data.averageQuizScore,
+        },
+      }
+    }
+
+    return {
+      success: false,
+      error: {
+        code: 'UNKNOWN_ERROR',
+        message: 'Failed to fetch stats',
+      },
+    }
+  } catch {
+    return {
+      success: false,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'Network error. Please try again',
+      },
+    }
+  }
+}
+
+export async function getUserProgressService(jwt: string): Promise<UserProgressResponse> {
+  const url = `${process.env.BACKEND_URL}/api/v1/users/me/progress`
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: {
+          code: data.error?.code || String(response.status),
+          message: data.error?.message || 'Failed to fetch progress',
+        },
+      }
+    }
+
+    if (data.success) {
+      return {
+        success: true,
+        data: data.data || [],
+      }
+    }
+
+    return {
+      success: false,
+      error: {
+        code: 'UNKNOWN_ERROR',
+        message: 'Failed to fetch progress',
+      },
+    }
+  } catch {
     return {
       success: false,
       error: {
