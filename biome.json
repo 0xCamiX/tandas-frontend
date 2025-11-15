@@ -24,9 +24,6 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 100,
-    "attributePosition": "auto",
-    "bracketSameLine": false,
-    "bracketSpacing": true,
     "expand": "always"
   },
   "linter": {
