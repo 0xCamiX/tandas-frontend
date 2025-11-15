@@ -1,4 +1,3 @@
-// Centralized type definitions
 export type User = {
   id: string
   email: string
@@ -37,4 +36,3 @@ export type CourseProgress = {
   totalModules: number
   completedAt: string | null
 }
-
