@@ -56,46 +56,46 @@ export function SignupForm() {
       <form action={formAction}>
         <Card>
           <CardHeader className={styles.header}>
-            <CardTitle className={styles.title}>Sign Up</CardTitle>
-            <CardDescription>Enter your details to create a new account</CardDescription>
+            <CardTitle className={styles.title}>Registrarse</CardTitle>
+            <CardDescription>Ingresa tus datos para crear una nueva cuenta</CardDescription>
           </CardHeader>
           <CardContent className={styles.content}>
             <div className={styles.fieldGroup}>
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">Nombre de usuario</Label>
               <Input
                 defaultValue={state.data?.username ?? ''}
                 id={useId()}
                 name="username"
-                placeholder="username"
+                placeholder="nombre de usuario"
                 type="text"
               />
               <FormError issues={state.issues?.username} />
             </div>
             <div className={styles.fieldGroup}>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Correo electrónico</Label>
               <Input
                 defaultValue={state.data?.email ?? ''}
                 id={useId()}
                 name="email"
-                placeholder="name@example.com"
+                placeholder="ejemplo@correo.com"
                 type="email"
               />
               <FormError issues={state.issues?.email} />
             </div>
             <div className={styles.fieldGroup}>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Contraseña</Label>
               <Input
                 defaultValue={state.data?.password ?? ''}
                 id={useId()}
                 name="password"
-                placeholder="password"
+                placeholder="contraseña"
                 type="password"
               />
               <FormError issues={state.issues?.password} />
             </div>
           </CardContent>
           <CardFooter className={styles.footer}>
-            <Button className={styles.button}>Sign Up</Button>
+            <Button className={styles.button}>Registrarse</Button>
             {state.backendErrors?.message && (
               <p className="py-2 mt-1 text-xs italic text-red-500">
                 {state.backendErrors?.message}
@@ -104,9 +104,9 @@ export function SignupForm() {
           </CardFooter>
         </Card>
         <div className={styles.prompt}>
-          Have an account?
+          ¿Ya tienes una cuenta?
           <Link className={styles.link} href="/signin">
-            Sign In
+            Iniciar Sesión
           </Link>
         </div>
       </form>
