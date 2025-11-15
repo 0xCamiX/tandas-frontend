@@ -1,24 +1,21 @@
-export type User = {
-  id: string
-  email: string
-  name: string | null
-  image: string | null
-  emailVerified: boolean
-  createdAt: string
-  updatedAt: string
-}
+/**
+ * @deprecated Use types from '@/lib/types' instead
+ * This file is kept for backward compatibility
+ */
+import type {
+  User,
+  RegisterUserData,
+  LoginUserData,
+  UserStats,
+  CourseProgress,
+} from './types'
 
-export interface RegisterUserData {
-  username: string
-  email: string
-  password: string
-  callbackUrl: string
-}
-
-export interface LoginUserData {
-  email: string
-  password: string
-  callbackURL: string
+export type {
+  User,
+  RegisterUserData,
+  LoginUserData,
+  UserStats,
+  CourseProgress,
 }
 
 type RegisterUserSuccess = {
@@ -68,16 +65,12 @@ export type UserResponse = {
   }
 }
 
-export type UserStats = {
-  totalEnrollments: number
-  totalCompletions: number
-  totalQuizAttempts: number
-  averageQuizScore: number
-}
-
+/**
+ * @deprecated Use types from '@/lib/types' instead
+ */
 export type UserStatsResponse = {
   success: true
-  data: UserStats
+  data: import('./types').UserStats
 } | {
   success: false
   error: {
@@ -86,14 +79,9 @@ export type UserStatsResponse = {
   }
 }
 
-export type CourseProgress = {
-  courseId: string
-  courseTitle: string
-  progress: number
-  completedModules: number
-  totalModules: number
-  completedAt: string | null
-}
+/**
+ * @deprecated Use types from '@/lib/types' instead
+ */
 
 export type UserProgressResponse = {
   success: true
@@ -106,6 +94,9 @@ export type UserProgressResponse = {
   }
 }
 
+/**
+ * @deprecated Use '@/lib/services/auth.service' instead
+ */
 export async function registerUserService(
   userData: RegisterUserData,
 ): Promise<RegisterUserResponse> {
@@ -193,6 +184,9 @@ export async function registerUserService(
   }
 }
 
+/**
+ * @deprecated Use '@/lib/services/auth.service' instead
+ */
 export async function loginUserService(userData: LoginUserData): Promise<LoginUserResponse> {
   const url = `${process.env.BACKEND_URL}/api/auth/sign-in/email`
 
@@ -278,6 +272,9 @@ export async function loginUserService(userData: LoginUserData): Promise<LoginUs
   }
 }
 
+/**
+ * @deprecated Use '@/lib/services/user.service' instead
+ */
 export async function getCurrentUserService(jwt: string): Promise<UserResponse> {
   const url = `${process.env.BACKEND_URL}/api/v1/users/me`
 
@@ -336,6 +333,9 @@ export async function getCurrentUserService(jwt: string): Promise<UserResponse> 
   }
 }
 
+/**
+ * @deprecated Use '@/lib/services/user.service' instead
+ */
 export async function getUserStatsService(jwt: string): Promise<UserStatsResponse> {
   const url = `${process.env.BACKEND_URL}/api/v1/users/me/stats`
 
@@ -391,6 +391,9 @@ export async function getUserStatsService(jwt: string): Promise<UserStatsRespons
   }
 }
 
+/**
+ * @deprecated Use '@/lib/services/user.service' instead
+ */
 export async function getUserProgressService(jwt: string): Promise<UserProgressResponse> {
   const url = `${process.env.BACKEND_URL}/api/v1/users/me/progress`
 

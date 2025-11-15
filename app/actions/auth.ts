@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import * as v from 'valibot'
-import { loginUserService, registerUserService } from '@/lib/api'
+import { loginUserService, registerUserService } from '@/lib/services/auth.service'
 import { type FormState, SigninFormSchema, SignupFormSchema } from '@/validations/auth'
 
 function getCookieConfig() {

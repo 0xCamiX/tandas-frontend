@@ -1,19 +1,15 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import type { CourseProgress, User, UserStats } from '@/lib/api'
-import { getCurrentUserService, getUserProgressService, getUserStatsService } from '@/lib/api'
+import type { CourseProgress, User, UserStats } from '@/lib/types'
+import {
+  getCurrentUserService,
+  getUserProgressService,
+  getUserStatsService,
+} from '@/lib/services/user.service'
 
 export async function getCurrentUserAction(): Promise<User | null> {
   try {
-    const cookieStore = await cookies()
-    const jwt = cookieStore.get('jwt')?.value
-
-    if (!jwt || !process.env.BACKEND_URL) {
-      return null
-    }
-
-    const response = await getCurrentUserService(jwt)
+    const response = await getCurrentUserService()
 
     if (response.success) {
       return response.data
@@ -27,14 +23,7 @@ export async function getCurrentUserAction(): Promise<User | null> {
 
 export async function getUserStatsAction(): Promise<UserStats | null> {
   try {
-    const cookieStore = await cookies()
-    const jwt = cookieStore.get('jwt')?.value
-
-    if (!jwt || !process.env.BACKEND_URL) {
-      return null
-    }
-
-    const response = await getUserStatsService(jwt)
+    const response = await getUserStatsService()
 
     if (response.success) {
       return response.data
@@ -48,14 +37,7 @@ export async function getUserStatsAction(): Promise<UserStats | null> {
 
 export async function getUserProgressAction(): Promise<CourseProgress[]> {
   try {
-    const cookieStore = await cookies()
-    const jwt = cookieStore.get('jwt')?.value
-
-    if (!jwt || !process.env.BACKEND_URL) {
-      return []
-    }
-
-    const response = await getUserProgressService(jwt)
+    const response = await getUserProgressService()
 
     if (response.success) {
       return response.data

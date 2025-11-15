@@ -1,6 +1,6 @@
 import { User } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { User as UserType } from '@/lib/api'
+import type { User as UserType } from '@/lib/types'
 
 type AccountInfoProps = {
   user: UserType

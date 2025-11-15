@@ -1,6 +1,6 @@
 import { Award, BookOpen, CheckCircle, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { UserStats } from '@/lib/api'
+import type { UserStats } from '@/lib/types'
 
 type StatsCardsProps = {
   stats: UserStats

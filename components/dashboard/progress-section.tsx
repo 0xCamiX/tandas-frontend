@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { CourseProgress } from '@/lib/api'
+import type { CourseProgress } from '@/lib/types'
 
 type ProgressSectionProps = {
   progress: CourseProgress[]
