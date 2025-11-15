@@ -7,11 +7,11 @@ export const siteConfig = {
   landingNav: [
     {
       title: 'Iniciar sesión',
-      href: '/login',
+      href: '/signin',
     },
     {
       title: 'Registrarse',
-      href: '/register',
+      href: '/signup',
     },
   ],
   mainNav: [
@@ -20,12 +20,12 @@ export const siteConfig = {
       href: '/',
     },
     {
-      title: 'Cursos',
-      href: '/cursos',
+      title: 'Dashboard',
+      href: '/dashboard',
     },
     {
-      title: 'Perfil',
-      href: '/profile',
+      title: 'Cursos',
+      href: '/dashboard/courses',
     },
   ],
 }
