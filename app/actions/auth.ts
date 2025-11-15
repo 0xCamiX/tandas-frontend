@@ -6,6 +6,34 @@ import * as v from 'valibot'
 import { loginUserService, registerUserService } from '@/lib/api'
 import { type FormState, SigninFormSchema, SignupFormSchema } from '@/validations/auth'
 
+function getCookieConfig() {
+  const isProduction = process.env.NODE_ENV === 'production'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+
+  let domain: string | undefined
+  if (appUrl && isProduction) {
+    try {
+      const url = new URL(appUrl)
+      domain = url.hostname
+    } catch {
+      domain = undefined
+    }
+  }
+
+  return {
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: '/',
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: 'lax' as const,
+    ...(domain && domain !== 'localhost'
+      ? {
+          domain,
+        }
+      : {}),
+  }
+}
+
 export async function registerUserAction(
   prevState: FormState,
   formData: FormData,
@@ -115,15 +143,24 @@ export async function loginUserAction(
   const response = await loginUserService(userData)
 
   if (response.success) {
+    if (!response.data.token) {
+      return {
+        success: false,
+        message: 'Token not received from server',
+        data: {
+          ...prevState.data,
+          email: fields.email,
+        },
+        backendErrors: {
+          code: 'MISSING_TOKEN',
+          message: 'Token not received from server',
+        },
+      }
+    }
+
     const cookieStore = await cookies()
-    cookieStore.set('jwt', response?.data?.token ?? '', {
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/',
-      httpOnly: true, // Only accessible by the server
-      domain: process.env.NEXT_PUBLIC_APP_URL ?? 'localhost',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-    })
+    const config = getCookieConfig()
+    cookieStore.set('jwt', response.data.token, config)
     redirect('/')
   }
 
