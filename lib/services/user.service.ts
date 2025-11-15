@@ -2,38 +2,44 @@ import { apiClient } from '@/lib/api-client'
 import { getJWT } from '@/lib/auth'
 import type { CourseProgress, User, UserStats } from '@/lib/types'
 
-export type UserResponse = {
-  success: true
-  data: User
-} | {
-  success: false
-  error: {
-    code: string
-    message: string
-  }
-}
+export type UserResponse =
+  | {
+      success: true
+      data: User
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
 
-export type UserStatsResponse = {
-  success: true
-  data: UserStats
-} | {
-  success: false
-  error: {
-    code: string
-    message: string
-  }
-}
+export type UserStatsResponse =
+  | {
+      success: true
+      data: UserStats
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
 
-export type UserProgressResponse = {
-  success: true
-  data: CourseProgress[]
-} | {
-  success: false
-  error: {
-    code: string
-    message: string
-  }
-}
+export type UserProgressResponse =
+  | {
+      success: true
+      data: CourseProgress[]
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
 
 export async function getCurrentUserService(): Promise<UserResponse> {
   const jwt = await getJWT()
@@ -91,4 +97,3 @@ export async function getUserProgressService(): Promise<UserProgressResponse> {
     jwt,
   })
 }
-

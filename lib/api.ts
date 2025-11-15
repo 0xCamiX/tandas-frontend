@@ -2,21 +2,9 @@
  * @deprecated Use types from '@/lib/types' instead
  * This file is kept for backward compatibility
  */
-import type {
-  User,
-  RegisterUserData,
-  LoginUserData,
-  UserStats,
-  CourseProgress,
-} from './types'
+import type { CourseProgress, LoginUserData, RegisterUserData, User, UserStats } from './types'
 
-export type {
-  User,
-  RegisterUserData,
-  LoginUserData,
-  UserStats,
-  CourseProgress,
-}
+export type { User, RegisterUserData, LoginUserData, UserStats, CourseProgress }
 
 type RegisterUserSuccess = {
   success: true
@@ -54,45 +42,51 @@ type LoginUserError = {
 
 export type LoginUserResponse = LoginUserSuccess | LoginUserError
 
-export type UserResponse = {
-  success: true
-  data: User
-} | {
-  success: false
-  error: {
-    code: string
-    message: string
-  }
-}
+export type UserResponse =
+  | {
+      success: true
+      data: User
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
 
 /**
  * @deprecated Use types from '@/lib/types' instead
  */
-export type UserStatsResponse = {
-  success: true
-  data: import('./types').UserStats
-} | {
-  success: false
-  error: {
-    code: string
-    message: string
-  }
-}
+export type UserStatsResponse =
+  | {
+      success: true
+      data: import('./types').UserStats
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
 
 /**
  * @deprecated Use types from '@/lib/types' instead
  */
 
-export type UserProgressResponse = {
-  success: true
-  data: CourseProgress[]
-} | {
-  success: false
-  error: {
-    code: string
-    message: string
-  }
-}
+export type UserProgressResponse =
+  | {
+      success: true
+      data: CourseProgress[]
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
 
 /**
  * @deprecated Use '@/lib/services/auth.service' instead

@@ -53,4 +53,3 @@ export function AccountInfo({ user }: AccountInfoProps) {
     </Card>
   )
 }
-

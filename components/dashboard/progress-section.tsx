@@ -31,7 +31,7 @@ export function ProgressSection({ progress }: ProgressSectionProps) {
       <CardContent>
         <div className="space-y-6">
           {progress.map(course => (
-            <div key={course.courseId} className="space-y-2">
+            <div className="space-y-2" key={course.courseId}>
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-lg">{course.courseTitle}</h3>
                 <span className="text-sm font-medium text-muted-foreground">
@@ -41,7 +41,9 @@ export function ProgressSection({ progress }: ProgressSectionProps) {
               <div className="w-full bg-muted rounded-full h-2.5">
                 <div
                   className="bg-primary h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${course.progress}%` }}
+                  style={{
+                    width: `${course.progress}%`,
+                  }}
                 />
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -61,4 +63,3 @@ export function ProgressSection({ progress }: ProgressSectionProps) {
     </Card>
   )
 }
-

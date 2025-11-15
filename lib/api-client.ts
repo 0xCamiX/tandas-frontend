@@ -42,13 +42,7 @@ export class ApiClient {
   }
 
   async request<T>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
-    const {
-      method = 'GET',
-      headers = {},
-      body,
-      requiresAuth = false,
-      jwt,
-    } = options
+    const { method = 'GET', headers = {}, body, requiresAuth = false, jwt } = options
 
     try {
       const url = `${this.baseUrl}${endpoint}`
@@ -94,14 +88,18 @@ export class ApiClient {
       const responseData = data.data || data
 
       if (tokenHeader && typeof responseData === 'object' && responseData !== null) {
-        ;(responseData as { token?: string }).token = tokenHeader
+        ;(
+          responseData as {
+            token?: string
+          }
+        ).token = tokenHeader
       }
 
       return {
         success: true,
         data: responseData,
       }
-    } catch (error) {
+    } catch {
       return {
         success: false,
         error: {
@@ -112,22 +110,45 @@ export class ApiClient {
     }
   }
 
-  async get<T>(endpoint: string, options: Omit<RequestOptions, 'method'> = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: 'GET' })
+  async get<T>(
+    endpoint: string,
+    options: Omit<RequestOptions, 'method'> = {},
+  ): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'GET',
+    })
   }
 
-  async post<T>(endpoint: string, options: Omit<RequestOptions, 'method'> = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: 'POST' })
+  async post<T>(
+    endpoint: string,
+    options: Omit<RequestOptions, 'method'> = {},
+  ): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'POST',
+    })
   }
 
-  async put<T>(endpoint: string, options: Omit<RequestOptions, 'method'> = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: 'PUT' })
+  async put<T>(
+    endpoint: string,
+    options: Omit<RequestOptions, 'method'> = {},
+  ): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'PUT',
+    })
   }
 
-  async delete<T>(endpoint: string, options: Omit<RequestOptions, 'method'> = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: 'DELETE' })
+  async delete<T>(
+    endpoint: string,
+    options: Omit<RequestOptions, 'method'> = {},
+  ): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'DELETE',
+    })
   }
 }
 
 export const apiClient = new ApiClient()
-

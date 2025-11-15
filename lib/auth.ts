@@ -9,4 +9,3 @@ export async function getJWT(): Promise<string | null> {
     return null
   }
 }
-

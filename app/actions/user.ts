@@ -1,11 +1,11 @@
 'use server'
 
-import type { CourseProgress, User, UserStats } from '@/lib/types'
 import {
   getCurrentUserService,
   getUserProgressService,
   getUserStatsService,
 } from '@/lib/services/user.service'
+import type { CourseProgress, User, UserStats } from '@/lib/types'
 
 export async function getCurrentUserAction(): Promise<User | null> {
   try {
