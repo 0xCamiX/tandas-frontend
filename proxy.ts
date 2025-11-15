@@ -29,6 +29,10 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL('signin', request.url))
     }
 
+    if (!process.env.BACKEND_URL) {
+      // If BACKEND_URL is not defined, redirect to signin or handle error
+      return NextResponse.redirect(new URL('signin', request.url))
+    }
     const response = await fetch(`${process.env.BACKEND_URL}/api/v1/users/me`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
