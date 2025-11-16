@@ -103,6 +103,6 @@ jobs:
       - name: Build Next.js
         run: bun run build
         env:
-          NEXT_PUBLIC_APP_URL: ${{ env.NEXT_PUBLIC_APP_URL }}
-          BACKEND_URL: ${{ env.BACKEND_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
 
