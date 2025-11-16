@@ -38,9 +38,6 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
   const course = courseResponse.data
 
-  // Debug: verificar la URL de la imagen
-  console.log('Course imageUrl:', course.imageUrl)
-
   const totalDuration = course.modules.reduce((total, module) => total + module.duration, 0)
 
   const sortedModules = [

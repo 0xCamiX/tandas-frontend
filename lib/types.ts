@@ -76,3 +76,52 @@ export type CourseModule = {
 export type CourseWithModules = Course & {
   modules: CourseModule[]
 }
+
+export type QuizOption = {
+  id: string
+  optionText: string
+  isCorrect: boolean
+  order: number
+}
+
+export type Quiz = {
+  id: string
+  moduleId: string
+  question: string
+  type: 'MULTIPLE_CHOICE'
+  explanation: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export type QuizWithOptions = Quiz & {
+  options: QuizOption[]
+}
+
+export type Module = {
+  id: string
+  courseId: string
+  title: string
+  content: string | null
+  videoUrl: string | null
+  order: number
+  duration: number | null
+  createdAt: string
+  updatedAt: string
+}
+
+export type ModuleResource = {
+  id: string
+  resourceType: string
+  url: string
+  title: string | null
+}
+
+export type ModuleWithRelations = Module & {
+  course: {
+    id: string
+    title: string
+  }
+  quizzes: Quiz[]
+  resources: ModuleResource[]
+}

@@ -104,7 +104,10 @@ export async function getCourseByIdService(courseId: string): Promise<CourseWith
     cache: 'force-cache',
     next: {
       revalidate: 600, // Revalidar cada 10 minutos
-      tags: ['courses', `course-${courseId}`],
+      tags: [
+        'courses',
+        `course-${courseId}`,
+      ],
     },
   })
 }

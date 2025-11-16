@@ -15,7 +15,9 @@ function formatDuration(minutes: number): string {
 }
 
 export function CourseModulesList({ modules }: CourseModulesListProps) {
-  const sortedModules = [...modules].sort((a, b) => a.order - b.order)
+  const sortedModules = [
+    ...modules,
+  ].sort((a, b) => a.order - b.order)
 
   if (sortedModules.length === 0) {
     return (
@@ -27,10 +29,10 @@ export function CourseModulesList({ modules }: CourseModulesListProps) {
 
   return (
     <div className="space-y-3">
-      {sortedModules.map((module, index) => (
+      {sortedModules.map(module => (
         <div
-          key={module.id}
           className="flex items-center gap-4 rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50"
+          key={module.id}
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
             {module.order}
@@ -52,4 +54,3 @@ export function CourseModulesList({ modules }: CourseModulesListProps) {
     </div>
   )
 }
-
