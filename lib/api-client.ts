@@ -17,6 +17,11 @@ type RequestOptions = {
   body?: unknown
   requiresAuth?: boolean
   jwt?: string | null
+  cache?: RequestCache
+  next?: {
+    revalidate?: number | false
+    tags?: string[]
+  }
 }
 
 export class ApiClient {
@@ -48,16 +53,31 @@ export class ApiClient {
       const url = `${this.baseUrl}${endpoint}`
       const authHeaders = requiresAuth ? await this.getAuthHeaders(jwt) : {}
 
-      const response = await fetch(url, {
+      // Siempre agregar Content-Type para requests con body
+      const requestHeaders: Record<string, string> = {
+        'Content-Type': 'application/json',
+        ...authHeaders,
+        ...headers,
+      }
+
+      const requestBody = body ? JSON.stringify(body) : undefined
+
+      const cacheOption = options.cache ?? (method === 'GET' ? 'force-cache' : 'no-store')
+
+      const fetchOptions: RequestInit = {
         method,
-        headers: {
-          ...authHeaders,
-          ...headers,
-        },
-        body: body ? JSON.stringify(body) : undefined,
+        headers: requestHeaders,
+        body: requestBody,
         credentials: 'include',
-        cache: 'no-store',
-      })
+        cache: cacheOption,
+      }
+
+      // Agregar opciones de Next.js cache si están disponibles
+      if (options.next) {
+        fetchOptions.next = options.next
+      }
+
+      const response = await fetch(url, fetchOptions)
 
       // Leer headers antes de parsear JSON
       const tokenHeader = response.headers.get('set-auth-token')

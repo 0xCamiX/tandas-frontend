@@ -57,6 +57,13 @@ export async function getCurrentUserService(): Promise<UserResponse> {
   return apiClient.get<User>('/api/v1/users/me', {
     requiresAuth: true,
     jwt,
+    cache: 'force-cache',
+    next: {
+      revalidate: 300,
+      tags: [
+        'user-profile',
+      ],
+    },
   })
 }
 
@@ -73,9 +80,17 @@ export async function getUserStatsService(): Promise<UserStatsResponse> {
     }
   }
 
+  // Stats cambian menos frecuentemente, cache más largo
   return apiClient.get<UserStats>('/api/v1/users/me/stats', {
     requiresAuth: true,
     jwt,
+    cache: 'force-cache',
+    next: {
+      revalidate: 600, // Revalidar cada 10 minutos (stats cambian menos frecuentemente)
+      tags: [
+        'user-stats',
+      ],
+    },
   })
 }
 
@@ -95,5 +110,12 @@ export async function getUserProgressService(): Promise<UserProgressResponse> {
   return apiClient.get<CourseProgress[]>('/api/v1/users/me/progress', {
     requiresAuth: true,
     jwt,
+    cache: 'force-cache',
+    next: {
+      revalidate: 300, // Revalidar cada 5 minutos
+      tags: [
+        'user-progress',
+      ],
+    },
   })
 }

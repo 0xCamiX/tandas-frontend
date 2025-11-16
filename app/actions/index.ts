@@ -1,10 +1,11 @@
-import { loginUserAction, registerUserAction } from './auth'
+import { loginUserAction, logoutAction, registerUserAction } from './auth'
 import { getCurrentUserAction, getUserProgressAction, getUserStatsAction } from './user'
 
 export const actions = {
   auth: {
     registerUserAction,
     loginUserAction,
+    logoutAction,
   },
   user: {
     getCurrentUserAction,

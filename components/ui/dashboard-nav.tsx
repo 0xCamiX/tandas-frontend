@@ -3,6 +3,7 @@
 import { LogOut, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { logoutAction } from '@/app/actions/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,10 +16,35 @@ import {
 } from '@/components/ui/dropdown-menu'
 import Icon from '@/components/ui/icons/icon'
 import { siteConfig } from '@/config/site'
+import type { User as UserType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
-export function DashboardNav() {
+type DashboardNavProps = {
+  user: UserType | null
+}
+
+export function DashboardNav({ user }: DashboardNavProps) {
   const pathname = usePathname()
+
+  const handleLogout = async () => {
+    await logoutAction()
+  }
+
+  const getInitials = (name: string | null, email: string) => {
+    if (name) {
+      return name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    }
+    return email[0].toUpperCase()
+  }
+
+  const userName = user?.name || 'Usuario'
+  const userEmail = user?.email || 'usuario@ejemplo.com'
+  const userImage = user?.image || null
 
   return (
     <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 border-b">
@@ -56,21 +82,21 @@ export function DashboardNav() {
               type="button"
             >
               <Avatar className="size-10">
-                <AvatarImage alt="Usuario" src="" />
-                <AvatarFallback>U</AvatarFallback>
+                <AvatarImage alt={userName} src={userImage || undefined} />
+                <AvatarFallback>{getInitials(user?.name || null, userEmail)}</AvatarFallback>
               </Avatar>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Usuario</p>
-                <p className="text-xs leading-none text-muted-foreground">usuario@ejemplo.com</p>
+                <p className="text-sm font-medium leading-none">{userName}</p>
+                <p className="text-xs leading-none text-muted-foreground">{userEmail}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link className="flex items-center cursor-pointer" href="/dashboard/profile">
+              <Link className="flex items-center cursor-pointer" href="/dashboard/">
                 <User className="mr-2 h-4 w-4" />
                 <span>Perfil</span>
               </Link>
@@ -78,6 +104,7 @@ export function DashboardNav() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer text-red-600 focus:text-red-600"
+              onClick={handleLogout}
               variant="destructive"
             >
               <LogOut className="mr-2 h-4 w-4" />
