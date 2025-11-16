@@ -24,12 +24,12 @@ export const siteConfig = {
       href: '/dashboard',
     },
     {
-      title: 'Perfil',
-      href: '/dashboard/profile',
+      title: 'Catálogo de Cursos',
+      href: '/dashboard/courses',
     },
     {
-      title: 'Cursos',
-      href: '/dashboard/courses',
+      title: 'Mi progreso',
+      href: '/dashboard/progress',
     },
   ],
 }
