@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api-client'
 import { getJWT } from '@/lib/auth'
-import type { Course, CourseLevel, CourseStatus } from '@/lib/types'
+import type { Course, CourseLevel, CourseStatus, CourseWithModules } from '@/lib/types'
 
 export type CourseFilters = {
   status?: CourseStatus
@@ -66,6 +66,45 @@ export async function getCoursesService(filters: CourseFilters = {}): Promise<Co
       tags: [
         'courses',
       ],
+    },
+  })
+}
+
+export type CourseWithModulesResponse =
+  | {
+      success: true
+      data: CourseWithModules
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
+
+export async function getCourseByIdService(courseId: string): Promise<CourseWithModulesResponse> {
+  const jwt = await getJWT()
+
+  if (!jwt) {
+    return {
+      success: false,
+      error: {
+        code: 'NO_TOKEN',
+        message: 'No authentication token found',
+      },
+    }
+  }
+
+  const endpoint = `/api/v1/courses/${courseId}/modules`
+
+  return apiClient.get<CourseWithModules>(endpoint, {
+    requiresAuth: true,
+    jwt,
+    cache: 'force-cache',
+    next: {
+      revalidate: 600, // Revalidar cada 10 minutos
+      tags: ['courses', `course-${courseId}`],
     },
   })
 }

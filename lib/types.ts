@@ -65,3 +65,14 @@ export type CourseCategory =
   | 'filtración'
   | 'almacenamiento seguro'
   | 'desinfección'
+
+export type CourseModule = {
+  id: string
+  title: string
+  order: number
+  duration: number
+}
+
+export type CourseWithModules = Course & {
+  modules: CourseModule[]
+}
