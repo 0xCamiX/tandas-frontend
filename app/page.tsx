@@ -1,6 +1,7 @@
 import { Award, BookOpen, Shield, Users, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Footer } from '@/components/ui/footer'
 import { Navbar } from '@/components/ui/navbar'
 
 export default function HomePage() {
@@ -19,7 +20,7 @@ export default function HomePage() {
                 pretratamiento de agua a nivel domiciliario.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register">
+                <Link href="/dashboard">
                   <Button className="w-full sm:w-auto dark:text-sky-50" size="lg">
                     Comenzar Ahora
                   </Button>
@@ -150,15 +151,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-background/80 backdrop-blur-sm border-t">
-        <div className="container mx-auto px-4 py-4">
-          <p className="text-sm text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} TANDAS. Todos los derechos reservados.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
