@@ -36,3 +36,32 @@ export type CourseProgress = {
   totalModules: number
   completedAt: string | null
 }
+
+export enum CourseStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum CourseLevel {
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
+}
+
+export type Course = {
+  id: string
+  title: string
+  description: string
+  imageUrl: string | null
+  category: string
+  level: CourseLevel
+  status: CourseStatus
+  createdAt: string
+  updatedAt: string
+}
+
+export type CourseCategory =
+  | 'sedimentación'
+  | 'filtración'
+  | 'almacenamiento seguro'
+  | 'desinfección'
