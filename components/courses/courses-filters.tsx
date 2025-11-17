@@ -90,7 +90,6 @@ export function CoursesFilters() {
   const clearFilters = () => {
     startTransition(() => {
       router.push('/dashboard/courses?status=ACTIVE')
-      router.refresh()
     })
   }
 
