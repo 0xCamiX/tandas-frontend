@@ -44,7 +44,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
     ? enrollmentStatusResponse.data.enrolled
     : false
 
-  const totalDuration = course.modules.reduce((total, module) => total + module.duration, 0)
+  const totalDuration = course.modules.reduce((total, module) => total + (module.duration || 0), 0)
 
   const sortedModules = [
     ...course.modules,
