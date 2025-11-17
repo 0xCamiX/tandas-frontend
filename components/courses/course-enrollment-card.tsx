@@ -50,9 +50,7 @@ export function CourseEnrollmentCard({ course, isEnrolled = false }: CourseEnrol
       // Redirigir fuera del useTransition usando setTimeout para asegurar que se ejecute
       if (redirectPath) {
         // Usar replace para evitar problemas con el historial y asegurar la navegación
-        setTimeout(() => {
-          router.replace(redirectPath!)
-        }, 100)
+        router.replace(redirectPath!)
       }
     })
   }
