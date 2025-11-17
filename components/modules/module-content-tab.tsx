@@ -16,9 +16,7 @@ export function ModuleContentTab({ module }: ModuleContentTabProps) {
         <p className="text-muted-foreground font-medium">
           No hay contenido disponible para este módulo
         </p>
-        <p className="text-sm text-muted-foreground mt-1">
-          El contenido se agregará próximamente
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">El contenido se agregará próximamente</p>
       </div>
     )
   }

@@ -82,7 +82,9 @@ export async function checkEnrollmentStatusService(
 
       return {
         success: true,
-        data: { enrolled },
+        data: {
+          enrolled,
+        },
       }
     }
   }

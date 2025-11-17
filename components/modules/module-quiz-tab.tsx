@@ -90,11 +90,6 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
 
           <div className="space-y-6">
             {quizzes.map((quiz, index) => {
-              const selectedOption = quiz.options.find(
-                option => option.id === selectedAnswers[quiz.id],
-              )
-              const isCorrect = selectedOption?.isCorrect
-
               return (
                 <div className="space-y-3" key={quiz.id}>
                   <div className="flex items-start gap-2">
