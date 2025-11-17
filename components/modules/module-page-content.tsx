@@ -1,3 +1,5 @@
+'use client'
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,6 +11,8 @@ import {
   Video,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 import { ModuleContentTab } from '@/components/modules/module-content-tab'
 import { ModuleQuizTab } from '@/components/modules/module-quiz-tab'
 import { ModuleSidebar } from '@/components/modules/module-sidebar'
@@ -48,6 +52,17 @@ export function ModulePageContent({
   currentModuleId,
 }: ModulePageContentProps) {
   const { prevModule, nextModule, position, totalModules } = navigation
+
+  useEffect(() => {
+    // Mostrar toast de bienvenida al módulo
+    toast.success(`Módulo ${position || ''}: ${module.title}`, {
+      description: 'Comienza explorando el contenido del módulo',
+      duration: 3000,
+    })
+  }, [
+    module.title,
+    position,
+  ])
 
   return (
     <div className="container py-8">
@@ -247,14 +262,13 @@ type ModuleResourcesSectionProps = {
 
 function ModuleResourcesSection({ resources }: ModuleResourcesSectionProps) {
   if (!resources || resources.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Recursos complementarios</CardTitle>
-          <CardDescription>No hay recursos disponibles para este módulo</CardDescription>
-        </CardHeader>
-      </Card>
-    )
+    return null
+  }
+
+  const handleResourceClick = (resourceTitle: string) => {
+    toast.info('Abriendo recurso', {
+      description: resourceTitle,
+    })
   }
 
   return (
@@ -271,7 +285,11 @@ function ModuleResourcesSection({ resources }: ModuleResourcesSectionProps) {
               <p className="font-medium">{resource.title ?? 'Recurso sin título'}</p>
               <p className="text-sm text-muted-foreground">{resource.resourceType}</p>
             </div>
-            <Button asChild variant="outline">
+            <Button
+              asChild
+              onClick={() => handleResourceClick(resource.title ?? 'Recurso')}
+              variant="outline"
+            >
               <a href={resource.url} rel="noopener noreferrer" target="_blank">
                 Ver recurso
               </a>
@@ -333,6 +351,12 @@ type DownloadRowProps = {
 }
 
 function DownloadRow({ icon: Icon, label, description, href }: DownloadRowProps) {
+  const handleDownloadClick = () => {
+    toast.success('Iniciando descarga', {
+      description: label,
+    })
+  }
+
   return (
     <div className="flex items-center gap-3 rounded-lg border p-4">
       <Icon className="h-5 w-5 text-primary" />
@@ -340,8 +364,8 @@ function DownloadRow({ icon: Icon, label, description, href }: DownloadRowProps)
         <p className="font-medium">{label}</p>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <Button asChild variant="secondary">
-        <a href={href} rel="noopener noreferrer" target="_blank">
+      <Button asChild onClick={handleDownloadClick} variant="secondary">
+        <a download href={href} rel="noopener noreferrer" target="_blank">
           Descargar
         </a>
       </Button>

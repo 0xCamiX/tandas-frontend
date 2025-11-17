@@ -56,15 +56,38 @@ export async function checkEnrollmentStatusService(
     }
   }
 
+  // Intentar el endpoint directo primero
   const endpoint = `/api/v1/enrollments/courses/${courseId}`
 
-  return apiClient.get<{
+  const response = await apiClient.get<{
     enrolled: boolean
   }>(endpoint, {
     requiresAuth: true,
     jwt,
     cache: 'no-store',
   })
+
+  // Si el endpoint directo falla, usar alternativa
+  if (!response.success && response.error.code === '404') {
+    // Fallback: Obtener todas las inscripciones y buscar el curso
+    const myEnrollmentsResponse = await apiClient.get<Enrollment[]>('/api/v1/enrollments/me', {
+      requiresAuth: true,
+      jwt,
+      cache: 'no-store',
+    })
+
+    if (myEnrollmentsResponse.success) {
+      const enrollments = myEnrollmentsResponse.data
+      const enrolled = enrollments.some(enrollment => enrollment.courseId === courseId)
+
+      return {
+        success: true,
+        data: { enrolled },
+      }
+    }
+  }
+
+  return response
 }
 
 export async function enrollCourseService(courseId: string): Promise<EnrollCourseResponse> {

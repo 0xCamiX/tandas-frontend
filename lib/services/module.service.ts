@@ -65,7 +65,7 @@ export async function getModuleWithRelationsService(
 ): Promise<ModuleWithRelationsResponse> {
   const jwt = await getJWT()
 
-  const endpoint = `/api/v1/modules/${moduleId}/relations`
+  const endpoint = `/api/v1/modules/${moduleId}/full`
 
   return apiClient.get<ModuleWithRelations>(endpoint, {
     requiresAuth: true,

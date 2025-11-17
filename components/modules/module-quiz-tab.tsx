@@ -2,6 +2,7 @@
 
 import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -48,6 +49,17 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
     const calculatedScore = Math.round((correctAnswers / quizzes.length) * 100)
     setScore(calculatedScore)
     setSubmitted(true)
+
+    // Mostrar feedback con toast
+    if (calculatedScore >= 70) {
+      toast.success('¡Excelente trabajo!', {
+        description: `Has aprobado la evaluación con ${calculatedScore}%`,
+      })
+    } else {
+      toast.error('Necesitas repasar', {
+        description: `Tu puntuación es ${calculatedScore}%. Intenta nuevamente después de revisar el contenido.`,
+      })
+    }
   }
 
   const allAnswered = quizzes.every(quiz => selectedAnswers[quiz.id])
@@ -128,6 +140,9 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
                 setSelectedAnswers({})
                 setSubmitted(false)
                 setScore(null)
+                toast.info('Puedes intentarlo de nuevo', {
+                  description: 'Lee cuidadosamente cada pregunta antes de responder.',
+                })
               }}
               variant="outline"
             >

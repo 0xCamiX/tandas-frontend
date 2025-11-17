@@ -1,18 +1,13 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { ModulePageContent } from '@/components/modules/module-page-content'
 import { getCourseByIdService } from '@/lib/services/course.service'
+import { checkEnrollmentStatusService } from '@/lib/services/enrollment.service'
 import {
   getModuleWithRelationsService,
   getQuizWithOptionsService,
 } from '@/lib/services/module.service'
-import type {
-  CourseModule,
-  CourseWithModules,
-  ModuleWithRelations,
-  Quiz,
-  QuizWithOptions,
-} from '@/lib/types'
-import { CourseLevel, CourseStatus } from '@/lib/types'
+import type { CourseModule, QuizWithOptions } from '@/lib/types'
 
 type ModulePageParams = Promise<{
   courseId: string
@@ -23,32 +18,101 @@ type ModulePageProps = {
   params: ModulePageParams
 }
 
+// Generar metadata dinámica para SEO
+// biome-ignore lint/style/useComponentExportOnlyModules: <"Next.js 16 convention for dynamic metadata">
+export async function generateMetadata({ params }: ModulePageProps): Promise<Metadata> {
+  const { courseId, moduleId } = await params
+
+  try {
+    const [courseResponse, moduleResponse] = await Promise.all([
+      getCourseByIdService(courseId),
+      getModuleWithRelationsService(moduleId),
+    ])
+
+    if (courseResponse.success && moduleResponse.success) {
+      const course = courseResponse.data
+      const module = moduleResponse.data
+
+      return {
+        title: `${module.title} - ${course.title} | TANDAS`,
+        description:
+          module.content
+            ?.replace(/<[^>]*>/g, '')
+            .substring(0, 160)
+            .trim() || course.description,
+      }
+    }
+  } catch {
+    // Si hay error, devolver metadata por defecto
+  }
+
+  return {
+    title: 'Módulo | TANDAS',
+    description: 'Contenido del módulo de aprendizaje',
+  }
+}
+
 export default async function ModulePage({ params }: ModulePageProps) {
   const { courseId, moduleId } = await params
 
-  const [courseResponse, moduleResponse] = await Promise.all([
+  // Obtener datos del curso y módulo en paralelo
+  const [courseResponse, moduleResponse, enrollmentStatusResponse] = await Promise.all([
     getCourseByIdService(courseId),
     getModuleWithRelationsService(moduleId),
+    checkEnrollmentStatusService(courseId),
   ])
 
-  const course = courseResponse.success ? courseResponse.data : getMockCourse(courseId)
-  const module = moduleResponse.success ? moduleResponse.data : getMockModule(moduleId, courseId)
-
+  // Si el curso no existe, redirigir a cursos
   if (!courseResponse.success) {
-    console.warn('[module-page] usando mock de curso para', courseId)
+    console.error('[ModulePage] Curso no encontrado:', courseId, courseResponse.error)
+    redirect('/dashboard/courses')
   }
 
+  const course = courseResponse.data
+
+  // Si el módulo no existe, redirigir al curso
   if (!moduleResponse.success) {
-    console.warn('[module-page] usando mock de módulo para', moduleId)
-  }
+    console.error('[ModulePage] Error al obtener módulo:', moduleId, moduleResponse.error)
 
-  const moduleCourseId = module.courseId ?? module.course?.id ?? null
+    // Verificar si el error es de red/backend
+    if (moduleResponse.error.code === 'NETWORK_ERROR') {
+      console.error(
+        '[ModulePage] Error de red - El backend puede no estar corriendo o el endpoint no existe',
+      )
+    }
 
-  if (moduleCourseId && moduleCourseId !== courseId) {
     redirect(`/dashboard/courses/${courseId}`)
   }
 
+  const module = moduleResponse.data
+
+  // Verificar que el módulo pertenece al curso correcto
+  const moduleCourseId = module.courseId ?? module.course?.id ?? null
+
+  if (moduleCourseId !== courseId) {
+    console.error('[ModulePage] Módulo no pertenece al curso:', {
+      moduleId,
+      courseId,
+      moduleCourseId,
+    })
+    redirect(`/dashboard/courses/${courseId}`)
+  }
+
+  // Verificar inscripción del usuario (solo advertir, no bloquear)
+  if (!enrollmentStatusResponse.success) {
+    console.warn('[ModulePage] No se pudo verificar inscripción:', enrollmentStatusResponse.error)
+  } else if (!enrollmentStatusResponse.data.enrolled) {
+    console.warn('[ModulePage] Usuario no inscrito en el curso:', {
+      courseId,
+      userId: 'current',
+    })
+    redirect(`/dashboard/courses/${courseId}`)
+  }
+
+  // Obtener quizzes del módulo
   const quizzes = await fetchQuizzes(module.quizzes ?? [])
+
+  // Obtener navegación entre módulos
   const { prevModule, nextModule, position, totalModules } = getModuleNavigation(
     course.modules,
     moduleId,
@@ -56,7 +120,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
 
   return (
     <ModulePageContent
-      course={course as CourseWithModules}
+      course={course}
       courseId={courseId}
       currentModuleId={moduleId}
       module={module}
@@ -124,74 +188,4 @@ function getModuleNavigation(modules: CourseModule[], moduleId: string) {
     position: currentIndex + 1,
     totalModules: sortedModules.length,
   }
-}
-
-function getMockCourse(courseId: string): CourseWithModules {
-  return {
-    id: courseId,
-    title: 'Curso de Sedimentación',
-    description: 'Aprende técnicas fundamentales de pretratamiento de agua.',
-    imageUrl: '/images/course-placeholder.png',
-    category: 'sedimentación',
-    level: CourseLevel.BEGINNER,
-    status: CourseStatus.ACTIVE,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    modules: [
-      {
-        id: 'mock-module-1',
-        title: 'Introducción a la sedimentación',
-        order: 1,
-        duration: 30,
-      },
-      {
-        id: 'mock-module-2',
-        title: 'Parámetros operativos',
-        order: 2,
-        duration: 40,
-      },
-    ],
-  }
-}
-
-function getMockModule(moduleId: string, courseId: string): ModuleWithRelations {
-  return {
-    id: moduleId,
-    courseId,
-    title: 'Módulo de ejemplo',
-    content:
-      '<h2>Contenido simulado</h2><p>Este módulo muestra texto e imágenes de prueba para la UI.</p>',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    order: 1,
-    duration: 35,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    course: {
-      id: courseId,
-      title: 'Curso de Sedimentación',
-    },
-    quizzes: getMockQuizzes(),
-    resources: [
-      {
-        id: 'mock-resource-1',
-        resourceType: 'PDF',
-        url: 'https://example.com/resource.pdf',
-        title: 'Guía rápida de sedimentación',
-      },
-    ],
-  }
-}
-
-function getMockQuizzes(): Quiz[] {
-  return [
-    {
-      id: 'mock-quiz-1',
-      moduleId: 'mock-module-1',
-      question: '¿Cuál es el objetivo principal de la sedimentación?',
-      type: 'MULTIPLE_CHOICE',
-      explanation: 'Separar sólidos suspendidos por gravedad antes de los procesos posteriores.',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ]
 }
