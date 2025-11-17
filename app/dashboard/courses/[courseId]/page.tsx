@@ -6,6 +6,7 @@ import { CourseEnrollmentCard } from '@/components/courses/course-enrollment-car
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCourseByIdService } from '@/lib/services/course.service'
+import { checkEnrollmentStatusService } from '@/lib/services/enrollment.service'
 import type { CourseLevel } from '@/lib/types'
 
 type CourseDetailPageProps = {
@@ -37,6 +38,11 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   }
 
   const course = courseResponse.data
+
+  const enrollmentStatusResponse = await checkEnrollmentStatusService(courseId)
+  const isEnrolled = enrollmentStatusResponse.success
+    ? enrollmentStatusResponse.data.enrolled
+    : false
 
   const totalDuration = course.modules.reduce((total, module) => total + module.duration, 0)
 
@@ -132,7 +138,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
         {/* Sidebar de inscripción */}
         <div className="lg:col-span-1">
-          <CourseEnrollmentCard course={course} />
+          <CourseEnrollmentCard course={course} isEnrolled={isEnrolled} />
         </div>
       </div>
     </div>
