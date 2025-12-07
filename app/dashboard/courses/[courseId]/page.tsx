@@ -71,7 +71,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           <p className="text-muted-foreground mb-6">{course.description}</p>
 
           {/* Imagen del curso */}
-          <div className="relative overflow-hidden rounded-lg bg-muted mb-8 w-full max-w-[600px] aspect-[2/1]">
+          <div className="relative overflow-hidden rounded-lg bg-muted mb-8 w-full max-w-[600px] aspect-2/1">
             {course.imageUrl ? (
               <Image
                 alt={course.title}
