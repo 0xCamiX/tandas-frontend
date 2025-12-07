@@ -57,7 +57,7 @@ async function CoursesContent({
 }) {
   const coursesResponse = await getCoursesService({
     search: search || undefined,
-    status: (status as CourseStatus) || CourseStatus.ACTIVE,
+    status: (status as CourseStatus) || CourseStatus.ACTIVO,
     category: category || undefined,
     level: (level as CourseLevel) || undefined,
   })

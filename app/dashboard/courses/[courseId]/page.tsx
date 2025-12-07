@@ -16,9 +16,9 @@ type CourseDetailPageProps = {
 }
 
 const levelLabels: Record<CourseLevel, string> = {
-  BEGINNER: 'Principiante',
-  INTERMEDIATE: 'Intermedio',
-  ADVANCED: 'Avanzado',
+  INICIAL: 'Inicial',
+  MEDIO: 'Medio',
+  AVANZADO: 'Avanzado',
 }
 
 const categoryLabels: Record<string, string> = {
