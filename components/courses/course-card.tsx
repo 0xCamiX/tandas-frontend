@@ -19,15 +19,15 @@ type CourseCardProps = {
 }
 
 const levelLabels: Record<CourseLevel, string> = {
-  BEGINNER: 'Principiante',
-  INTERMEDIATE: 'Intermedio',
-  ADVANCED: 'Avanzado',
+  INICIAL: 'Inicial',
+  MEDIO: 'Medio',
+  AVANZADO: 'Avanzado',
 }
 
 const levelColors: Record<CourseLevel, string> = {
-  BEGINNER: 'bg-green-500/10 text-green-700 dark:text-green-400',
-  INTERMEDIATE: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
-  ADVANCED: 'bg-purple-500/10 text-purple-700 dark:text-purple-400',
+  INICIAL: 'bg-green-500/10 text-green-700 dark:text-green-400',
+  MEDIO: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
+  AVANZADO: 'bg-purple-500/10 text-purple-700 dark:text-purple-400',
 }
 
 export function CourseCard({ course }: CourseCardProps) {

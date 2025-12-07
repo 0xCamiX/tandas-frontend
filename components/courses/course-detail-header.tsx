@@ -28,7 +28,7 @@ export function CourseDetailHeader({ course }: CourseDetailHeaderProps) {
         {course.imageUrl ? (
           <Image alt={course.title} className="object-cover" fill src={course.imageUrl} />
         ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+          <div className="flex h-full items-center justify-center bg-linear-to-br from-primary/10 to-primary/5">
             <BookOpen className="h-16 w-16 text-muted-foreground" />
           </div>
         )}

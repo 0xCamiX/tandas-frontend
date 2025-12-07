@@ -22,9 +22,9 @@ const categories: CourseCategory[] = [
 ]
 
 const levelLabels: Record<CourseLevel, string> = {
-  BEGINNER: 'Principiante',
-  INTERMEDIATE: 'Intermedio',
-  ADVANCED: 'Avanzado',
+  INICIAL: 'Inicial',
+  MEDIO: 'Medio',
+  AVANZADO: 'Avanzado',
 }
 
 export function CoursesFilters() {
@@ -35,7 +35,7 @@ export function CoursesFilters() {
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   // Leer valores actuales de searchParams para controlar los Select
-  const currentStatus = searchParams.get('status') || CourseStatus.ACTIVE
+  const currentStatus = searchParams.get('status') || CourseStatus.ACTIVO
   const currentCategory = searchParams.get('category') || 'all'
   const currentLevel = searchParams.get('level') || 'all'
 
@@ -89,7 +89,7 @@ export function CoursesFilters() {
 
   const clearFilters = () => {
     startTransition(() => {
-      router.push('/dashboard/courses?status=ACTIVE')
+      router.push('/dashboard/courses?status=ACTIVO')
     })
   }
 
@@ -97,7 +97,7 @@ export function CoursesFilters() {
     searchValue ||
     (currentCategory && currentCategory !== 'all') ||
     (currentLevel && currentLevel !== 'all') ||
-    currentStatus !== CourseStatus.ACTIVE
+    currentStatus !== CourseStatus.ACTIVO
 
   return (
     <div className="space-y-4">
@@ -125,8 +125,8 @@ export function CoursesFilters() {
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={CourseStatus.ACTIVE}>Activo</SelectItem>
-            <SelectItem value={CourseStatus.INACTIVE}>Inactivo</SelectItem>
+            <SelectItem value={CourseStatus.ACTIVO}>Activo</SelectItem>
+            <SelectItem value={CourseStatus.INACTIVO}>Inactivo</SelectItem>
           </SelectContent>
         </Select>
 
