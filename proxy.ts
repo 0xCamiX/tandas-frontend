@@ -6,7 +6,7 @@ const protectedRoutes = [
 ]
 
 function checkIsProtectedRoute(path: string) {
-  return protectedRoutes.includes(path)
+  return protectedRoutes.some(route => path === route || path.startsWith(`${route}/`))
 }
 
 export async function proxy(request: NextRequest) {
