@@ -256,6 +256,27 @@ function ModuleTabsSection({ module, quizzes }: ModuleTabsSectionProps) {
   )
 }
 
+/**
+ * Normaliza URLs de recursos para que funcionen correctamente desde cualquier ruta.
+ * - URLs externas (http/https) se mantienen igual
+ * - Rutas absolutas (que empiezan con /) se mantienen igual
+ * - Rutas relativas se convierten en rutas absolutas desde la raíz pública
+ */
+function normalizeResourceUrl(url: string): string {
+  // Si es una URL externa (http/https), mantenerla tal cual
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+
+  // Si ya es una ruta absoluta (empieza con /), mantenerla tal cual
+  if (url.startsWith('/')) {
+    return url
+  }
+
+  // Si es una ruta relativa, convertirla en absoluta desde la raíz pública
+  return `/${url}`
+}
+
 type ModuleResourcesSectionProps = {
   resources: ModuleResource[]
 }
@@ -278,24 +299,28 @@ function ModuleResourcesSection({ resources }: ModuleResourcesSectionProps) {
         <CardDescription>Material de apoyo para reforzar lo aprendido</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {resources.map(resource => (
-          <div className="flex items-start gap-3 rounded-lg border p-4" key={resource.id}>
-            <FileText className="mt-1 h-5 w-5 text-primary" />
-            <div className="flex-1">
-              <p className="font-medium">{resource.title ?? 'Recurso sin título'}</p>
-              <p className="text-sm text-muted-foreground">{resource.resourceType}</p>
+        {resources.map(resource => {
+          const normalizedUrl = normalizeResourceUrl(resource.url)
+
+          return (
+            <div className="flex items-start gap-3 rounded-lg border p-4" key={resource.id}>
+              <FileText className="mt-1 h-5 w-5 text-primary" />
+              <div className="flex-1">
+                <p className="font-medium">{resource.title ?? 'Recurso sin título'}</p>
+                <p className="text-sm text-muted-foreground">{resource.resourceType}</p>
+              </div>
+              <Button
+                asChild
+                onClick={() => handleResourceClick(resource.title ?? 'Recurso')}
+                variant="outline"
+              >
+                <a href={normalizedUrl} rel="noopener noreferrer" target="_blank">
+                  Ver recurso
+                </a>
+              </Button>
             </div>
-            <Button
-              asChild
-              onClick={() => handleResourceClick(resource.title ?? 'Recurso')}
-              variant="outline"
-            >
-              <a href={resource.url} rel="noopener noreferrer" target="_blank">
-                Ver recurso
-              </a>
-            </Button>
-          </div>
-        ))}
+          )
+        })}
       </CardContent>
     </Card>
   )
@@ -324,7 +349,7 @@ function ModuleDownloadsSection({ module }: ModuleDownloadsSectionProps) {
         {module.videoUrl && (
           <DownloadRow
             description="Archivo de video MP4"
-            href={module.videoUrl}
+            href={normalizeResourceUrl(module.videoUrl)}
             icon={Video}
             label="Video del módulo"
           />
@@ -332,7 +357,7 @@ function ModuleDownloadsSection({ module }: ModuleDownloadsSectionProps) {
         {module.resources.map(resource => (
           <DownloadRow
             description={resource.resourceType}
-            href={resource.url}
+            href={normalizeResourceUrl(resource.url)}
             icon={Download}
             key={resource.id}
             label={resource.title ?? 'Recurso descargable'}
@@ -421,9 +446,9 @@ function ModuleInfoCard({ module, position, totalModules, courseTitle }: ModuleI
 
 function translateLevel(level: string) {
   const mapping: Record<string, string> = {
-    BEGINNER: 'Principiante',
-    INTERMEDIATE: 'Intermedio',
-    ADVANCED: 'Avanzado',
+    INICIAL: 'Principiante',
+    INTERMEDIO: 'Intermedio',
+    AVANZADO: 'Avanzado',
   }
 
   return mapping[level] ?? level
