@@ -38,14 +38,14 @@ export type CourseProgress = {
 }
 
 export enum CourseStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVO = 'ACTIVO',
+  INACTIVO = 'INACTIVO',
 }
 
 export enum CourseLevel {
-  BEGINNER = 'BEGINNER',
-  INTERMEDIATE = 'INTERMEDIATE',
-  ADVANCED = 'ADVANCED',
+  INICIAL = 'INICIAL',
+  MEDIO = 'MEDIO',
+  AVANZADO = 'AVANZADO',
 }
 
 export type Course = {
