@@ -134,7 +134,7 @@ export async function loginUserAction(
     }
   }
 
-  const callbackURL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'
+  const callbackURL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3001'
 
   const userData = {
     email: validatedFields.output.email,
