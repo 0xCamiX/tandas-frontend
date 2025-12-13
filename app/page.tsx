@@ -1,34 +1,13 @@
 import { Award, BookOpen, Shield, Users, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import Icon from '@/components/ui/icons/icon'
-import { siteConfig } from '@/config/site'
+import { Footer } from '@/components/ui/footer'
+import { Navbar } from '@/components/ui/navbar'
 
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <Icon className="text-primary" height="4" width="4" />
-            <h1 className="bg-gradient-to-b from-primary to-primary-foreground bg-clip-text text-2xl font-bold text-transparent">
-              TANDAS
-            </h1>
-          </div>
-          <nav className="flex gap-2">
-            {siteConfig.landingNav.map(item => (
-              <Link href={item.href} key={item.title}>
-                <Button
-                  className="hover:bg-primary hover:text-primary-foreground transition-colors"
-                  variant="outline"
-                >
-                  {item.title}
-                </Button>
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </header>
+      <Navbar />
       <main className="flex-1">
         <section className="py-20 bg-gradient-to-b from-background to-muted/30">
           <div className="container mx-auto px-4">
@@ -41,7 +20,7 @@ export default function HomePage() {
                 pretratamiento de agua a nivel domiciliario.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register">
+                <Link href="/dashboard">
                   <Button className="w-full sm:w-auto dark:text-sky-50" size="lg">
                     Comenzar Ahora
                   </Button>
@@ -172,15 +151,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-background/80 backdrop-blur-sm border-t">
-        <div className="container mx-auto px-4 py-4">
-          <p className="text-sm text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} TANDAS. Todos los derechos reservados.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

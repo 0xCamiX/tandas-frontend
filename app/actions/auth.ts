@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import * as v from 'valibot'
-import { loginUserService, registerUserService } from '@/lib/api'
+import { loginUserService, registerUserService } from '@/lib/services/auth.service'
 import { type FormState, SigninFormSchema, SignupFormSchema } from '@/validations/auth'
 
 function getCookieConfig() {
@@ -134,10 +134,12 @@ export async function loginUserAction(
     }
   }
 
+  const callbackURL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'
+
   const userData = {
     email: validatedFields.output.email,
     password: validatedFields.output.password,
-    callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    callbackURL,
   }
 
   const response = await loginUserService(userData)
@@ -176,4 +178,12 @@ export async function loginUserAction(
       message: response.error.message,
     },
   }
+}
+
+export async function logoutAction() {
+  const cookieStore = await cookies()
+
+  cookieStore.delete('jwt')
+
+  redirect('/')
 }

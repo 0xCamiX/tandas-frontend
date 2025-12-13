@@ -24,8 +24,12 @@ export const siteConfig = {
       href: '/dashboard',
     },
     {
-      title: 'Cursos',
+      title: 'Catálogo de Cursos',
       href: '/dashboard/courses',
+    },
+    {
+      title: 'Mi progreso',
+      href: '/dashboard/progress',
     },
   ],
 }
