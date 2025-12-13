@@ -12,13 +12,11 @@ export interface RegisterUserData {
   username: string
   email: string
   password: string
-  callbackUrl: string
 }
 
 export interface LoginUserData {
   email: string
   password: string
-  callbackURL: string
 }
 
 export type UserStats = {
