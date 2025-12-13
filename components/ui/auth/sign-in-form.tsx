@@ -54,7 +54,11 @@ export function SigninForm({ callbackUrl }: SigninFormProps) {
     if (state.success && state.redirectUrl) {
       router.push(state.redirectUrl)
     }
-  }, [state.success, state.redirectUrl, router])
+  }, [
+    state.success,
+    state.redirectUrl,
+    router,
+  ])
 
   // Show toast for backend errors
   useEffect(() => {
