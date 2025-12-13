@@ -8,8 +8,8 @@ export function FormError({ issues }: { issues?: string[] }) {
           className="text-xs text-red-500 animate-in fade-in-0 slide-in-from-top-1 duration-200"
           key={issue}
         >
-      {issue}
-    </p>
+          {issue}
+        </p>
       ))}
     </div>
   )

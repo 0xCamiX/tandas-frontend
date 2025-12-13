@@ -55,7 +55,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
       <div className="container mx-auto flex items-center justify-between px-4 py-4">
         <Link className="flex items-center gap-2 hover:opacity-80 transition-opacity" href="/">
           <Icon className="text-primary" height="4" width="4" />
-          <h1 className="bg-gradient-to-b from-primary to-primary-foreground bg-clip-text text-2xl font-bold text-transparent">
+          <h1 className="bg-linear-to-b from-primary to-primary-foreground bg-clip-text text-2xl font-bold text-transparent">
             TANDAS
           </h1>
         </Link>
@@ -98,7 +98,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
                   <Icon className="text-primary" height="4" width="4" />
-                  <span className="bg-gradient-to-b from-primary to-primary-foreground bg-clip-text text-xl font-bold text-transparent">
+                  <span className="bg-linear-to-b from-primary to-primary-foreground bg-clip-text text-xl font-bold text-transparent">
                     TANDAS
                   </span>
                 </SheetTitle>
@@ -123,7 +123,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   )
                 })}
               </nav>
-              <div className="mt-auto pt-6 border-t mt-6">
+              <div className="mt-auto pt-6 border-t">
                 <div className="flex items-center gap-3 px-3 py-2">
                   <Avatar className="size-10">
                     <AvatarImage alt={userName} src={userImage || undefined} />
