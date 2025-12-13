@@ -70,8 +70,8 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   className={cn(
                     'bg-transparent hover:bg-transparent hover:text-foreground border-0 rounded-none border-b-2 transition-colors',
                     isActive
-                      ? 'border-black text-foreground'
-                      : 'border-transparent text-muted-foreground',
+                      ? 'border-foreground text-foreground'
+                      : 'border-transparent text-muted-foreground hover:border-muted-foreground/50',
                   )}
                   variant="ghost"
                 >
@@ -135,7 +135,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   </div>
                 </div>
                 <Button
-                  className="w-full mt-4 text-red-600 hover:text-red-600 hover:bg-red-50"
+                  className="w-full mt-4 text-red-600 hover:text-red-600 hover:bg-red-600/10 dark:text-red-500 dark:hover:text-red-500 dark:hover:bg-red-500/10"
                   onClick={handleLogout}
                   variant="ghost"
                 >
