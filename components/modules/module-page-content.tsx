@@ -112,14 +112,14 @@ type ModuleNavigationProps = {
 function ModuleNavigation({ courseId, prevModuleId, nextModuleId }: ModuleNavigationProps) {
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <Link className="w-full sm:w-auto" href={`/dashboard/courses/${courseId}`}>
+      <Link className="hidden sm:block w-full sm:w-auto" href={`/dashboard/courses/${courseId}`}>
         <Button className="w-full sm:w-auto" size="sm" variant="ghost">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver al curso
         </Button>
       </Link>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:w-full sm:justify-end">
         {prevModuleId && (
           <Link
             className="w-full sm:w-auto"
