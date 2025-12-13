@@ -3,7 +3,7 @@
 import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useActionState, useEffect, useId, useState } from 'react'
+import { useActionState, useEffect, useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { actions } from '@/app/actions'
 import { Button } from '@/components/ui/button'
@@ -51,10 +51,13 @@ export function SignupForm({ callbackUrl }: SignupFormProps) {
   const usernameId = useId()
   const emailId = useId()
   const passwordId = useId()
+  const successToastShownRef = useRef(false)
+  const lastErrorRef = useRef<string | null>(null)
 
-  // Redirect to signin after successful registration
+  // Redirect to signin after successful registration (prevent duplicate in Strict Mode)
   useEffect(() => {
-    if (state.success) {
+    if (state.success && !successToastShownRef.current) {
+      successToastShownRef.current = true
       toast.success('Registro exitoso', {
         description: 'Redirigiendo al inicio de sesión...',
         duration: 3000,
@@ -70,11 +73,13 @@ export function SignupForm({ callbackUrl }: SignupFormProps) {
     router,
   ])
 
-  // Show toast for backend errors
+  // Show toast for backend errors (prevent duplicates in Strict Mode)
   useEffect(() => {
-    if (state.backendErrors?.message) {
+    const errorMessage = state.backendErrors?.message
+    if (errorMessage && lastErrorRef.current !== errorMessage) {
+      lastErrorRef.current = errorMessage
       toast.error('Error de registro', {
-        description: state.backendErrors.message,
+        description: errorMessage,
         duration: 5000,
       })
     }

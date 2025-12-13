@@ -11,7 +11,7 @@ import {
   Video,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { ModuleContentTab } from '@/components/modules/module-content-tab'
 import { ModuleQuizTab } from '@/components/modules/module-quiz-tab'
@@ -52,14 +52,20 @@ export function ModulePageContent({
   currentModuleId,
 }: ModulePageContentProps) {
   const { prevModule, nextModule, position, totalModules } = navigation
+  const toastShownRef = useRef<string | null>(null)
 
   useEffect(() => {
-    // Mostrar toast de bienvenida al módulo
+    // Prevent duplicate toasts in React Strict Mode
+    const toastKey = `${module.id}-${position}`
+    if (toastShownRef.current === toastKey) return
+    toastShownRef.current = toastKey
+
     toast.success(`Módulo ${position || ''}: ${module.title}`, {
       description: 'Comienza explorando el contenido del módulo',
       duration: 3000,
     })
   }, [
+    module.id,
     module.title,
     position,
   ])

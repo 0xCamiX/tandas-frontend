@@ -3,7 +3,7 @@
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useActionState, useEffect, useId, useState } from 'react'
+import { useActionState, useEffect, useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { actions } from '@/app/actions'
 import { Button } from '@/components/ui/button'
@@ -48,6 +48,7 @@ export function SigninForm({ callbackUrl }: SigninFormProps) {
   const router = useRouter()
   const emailId = useId()
   const passwordId = useId()
+  const lastErrorRef = useRef<string | null>(null)
 
   // Handle successful login redirect
   useEffect(() => {
@@ -60,11 +61,13 @@ export function SigninForm({ callbackUrl }: SigninFormProps) {
     router,
   ])
 
-  // Show toast for backend errors
+  // Show toast for backend errors (prevent duplicates in Strict Mode)
   useEffect(() => {
-    if (state.backendErrors?.message) {
+    const errorMessage = state.backendErrors?.message
+    if (errorMessage && lastErrorRef.current !== errorMessage) {
+      lastErrorRef.current = errorMessage
       toast.error('Error de autenticación', {
-        description: state.backendErrors.message,
+        description: errorMessage,
         duration: 5000,
       })
     }
