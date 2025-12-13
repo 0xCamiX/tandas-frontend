@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import Icon from '@/components/ui/icons/icon'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { siteConfig } from '@/config/site'
 import type { User as UserType } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -82,6 +83,9 @@ export function DashboardNav({ user }: DashboardNavProps) {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* Mobile Navigation */}
           <Sheet onOpenChange={setIsOpen} open={isOpen}>
             <SheetTrigger asChild>
