@@ -37,6 +37,7 @@ export type SignupFormValues = v.InferOutput<typeof SignupFormSchema>
 export type FormState = {
   success?: boolean
   message?: string
+  redirectUrl?: string
   data?: {
     username?: string
     email?: string

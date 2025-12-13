@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icons/icon'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { siteConfig } from '@/config/site'
 
 export function Navbar() {
@@ -13,7 +14,8 @@ export function Navbar() {
             TANDAS
           </h1>
         </Link>
-        <nav className="flex gap-2">
+        <nav className="flex items-center gap-2">
+          <ThemeToggle />
           {siteConfig.landingNav.map(item => (
             <Link href={item.href} key={item.title}>
               <Button

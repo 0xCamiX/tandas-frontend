@@ -25,7 +25,7 @@ export default function HomePage() {
                     Comenzar Ahora
                   </Button>
                 </Link>
-                <Link href="/courses">
+                <Link href="/dashboard/courses">
                   <Button className="w-full sm:w-auto" size="lg" variant="outline">
                     Explorar Cursos
                   </Button>
@@ -139,7 +139,7 @@ export default function HomePage() {
             <p className="text-lg mb-8 max-w-2xl mx-auto">
               Únete a TANDAS hoy y aprende los métodos de pretratamiento de agua en el hogar.
             </p>
-            <Link href="/register">
+            <Link href="/signup">
               <Button
                 className="bg-background text-foreground hover:bg-background/90"
                 size="lg"
