@@ -8,7 +8,7 @@ import { type FormState, SigninFormSchema, SignupFormSchema } from '@/validation
 
 function getCookieConfig() {
   const isProduction = process.env.NODE_ENV === 'production'
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+  const appUrl = process.env.NEXT_PUBLIC_URL
 
   let domain: string | undefined
   if (appUrl && isProduction) {
@@ -71,7 +71,6 @@ export async function registerUserAction(
     username: validatedFields.output.username,
     email: validatedFields.output.email,
     password: validatedFields.output.password,
-    callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/signin`,
   }
 
   const response = await registerUserService(userData)
@@ -110,6 +109,7 @@ export async function loginUserAction(
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
+  const callbackUrl = formData.get('callbackUrl') as string | null
 
   const validatedFields = v.safeParse(SigninFormSchema, fields)
 
@@ -134,12 +134,9 @@ export async function loginUserAction(
     }
   }
 
-  const callbackURL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3001'
-
   const userData = {
     email: validatedFields.output.email,
     password: validatedFields.output.password,
-    callbackURL,
   }
 
   const response = await loginUserService(userData)
@@ -160,10 +157,24 @@ export async function loginUserAction(
       }
     }
 
+    // Set the JWT cookie
     const cookieStore = await cookies()
     const config = getCookieConfig()
     cookieStore.set('jwt', response.data.token, config)
-    redirect('/dashboard')
+
+    // Return success and let the client handle the redirect
+    const redirectUrl = callbackUrl?.startsWith('/') ? callbackUrl : '/dashboard'
+
+    return {
+      success: true,
+      message: 'Login successful',
+      data: {
+        email: fields.email,
+      },
+      redirectUrl, // Pass the redirect URL to the client
+      backendErrors: undefined,
+      issues: undefined,
+    }
   }
 
   return {

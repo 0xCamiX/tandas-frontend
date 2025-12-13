@@ -111,29 +111,37 @@ type ModuleNavigationProps = {
 
 function ModuleNavigation({ courseId, prevModuleId, nextModuleId }: ModuleNavigationProps) {
   return (
-    <div className="mb-6 flex items-center justify-between">
-      <Link href={`/dashboard/courses/${courseId}`}>
-        <Button size="sm" variant="ghost">
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <Link className="w-full sm:w-auto" href={`/dashboard/courses/${courseId}`}>
+        <Button className="w-full sm:w-auto" size="sm" variant="ghost">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver al curso
         </Button>
       </Link>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         {prevModuleId && (
-          <Link href={`/dashboard/courses/${courseId}/${prevModuleId}`}>
-            <Button size="sm" variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Módulo anterior
+          <Link
+            className="w-full sm:w-auto"
+            href={`/dashboard/courses/${courseId}/${prevModuleId}`}
+          >
+            <Button className="w-full sm:w-auto" size="sm" variant="outline">
+              <ArrowLeft className="mr-2 h-4 w-4 sm:mr-2" />
+              <span className="sm:inline">Anterior</span>
+              <span className="hidden sm:inline">&nbsp;módulo</span>
             </Button>
           </Link>
         )}
 
         {nextModuleId && (
-          <Link href={`/dashboard/courses/${courseId}/${nextModuleId}`}>
-            <Button size="sm" variant="outline">
-              Módulo siguiente
-              <ArrowRight className="ml-2 h-4 w-4" />
+          <Link
+            className="w-full sm:w-auto"
+            href={`/dashboard/courses/${courseId}/${nextModuleId}`}
+          >
+            <Button className="w-full sm:w-auto" size="sm" variant="outline">
+              <span className="sm:inline">Siguiente</span>
+              <span className="hidden sm:inline">&nbsp;módulo</span>
+              <ArrowRight className="ml-2 h-4 w-4 sm:ml-2" />
             </Button>
           </Link>
         )}

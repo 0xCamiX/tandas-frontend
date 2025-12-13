@@ -1,8 +1,9 @@
 'use client'
 
-import { LogOut, User } from 'lucide-react'
+import { LogOut, Menu, User, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 import { logoutAction } from '@/app/actions/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -15,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import Icon from '@/components/ui/icons/icon'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { siteConfig } from '@/config/site'
 import type { User as UserType } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -25,6 +27,7 @@ type DashboardNavProps = {
 
 export function DashboardNav({ user }: DashboardNavProps) {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleLogout = async () => {
     await logoutAction()
@@ -55,7 +58,9 @@ export function DashboardNav({ user }: DashboardNavProps) {
             TANDAS
           </h1>
         </Link>
-        <nav className="flex gap-2">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex gap-2">
           {siteConfig.mainNav.map(item => {
             const isActive = pathname === item.href
             return (
@@ -75,43 +80,107 @@ export function DashboardNav({ user }: DashboardNavProps) {
             )
           })}
         </nav>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              type="button"
-            >
-              <Avatar className="size-10">
-                <AvatarImage alt={userName} src={userImage || undefined} />
-                <AvatarFallback>{getInitials(user?.name || null, userEmail)}</AvatarFallback>
-              </Avatar>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{userName}</p>
-                <p className="text-xs leading-none text-muted-foreground">{userEmail}</p>
+
+        <div className="flex items-center gap-2">
+          {/* Mobile Navigation */}
+          <Sheet onOpenChange={setIsOpen} open={isOpen}>
+            <SheetTrigger asChild>
+              <Button className="md:hidden" size="icon" variant="ghost">
+                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-[280px] sm:w-[320px]" side="left">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <Icon className="text-primary" height="4" width="4" />
+                  <span className="bg-gradient-to-b from-primary to-primary-foreground bg-clip-text text-xl font-bold text-transparent">
+                    TANDAS
+                  </span>
+                </SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-2 mt-6">
+                {siteConfig.mainNav.map(item => {
+                  const isActive = pathname === item.href
+                  return (
+                    <Link
+                      className={cn(
+                        'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                        isActive
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-muted text-muted-foreground hover:text-foreground',
+                      )}
+                      href={item.href}
+                      key={item.title}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.title}
+                    </Link>
+                  )
+                })}
+              </nav>
+              <div className="mt-auto pt-6 border-t mt-6">
+                <div className="flex items-center gap-3 px-3 py-2">
+                  <Avatar className="size-10">
+                    <AvatarImage alt={userName} src={userImage || undefined} />
+                    <AvatarFallback>{getInitials(user?.name || null, userEmail)}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <p className="text-sm font-medium">{userName}</p>
+                    <p className="text-xs text-muted-foreground">{userEmail}</p>
+                  </div>
+                </div>
+                <Button
+                  className="w-full mt-4 text-red-600 hover:text-red-600 hover:bg-red-50"
+                  onClick={handleLogout}
+                  variant="ghost"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Cerrar sesión
+                </Button>
               </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link className="flex items-center cursor-pointer" href="/dashboard/">
-                <User className="mr-2 h-4 w-4" />
-                <span>Perfil</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="cursor-pointer text-red-600 focus:text-red-600"
-              onClick={handleLogout}
-              variant="destructive"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Cerrar sesión</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </SheetContent>
+          </Sheet>
+
+          {/* User Dropdown (Desktop) */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                type="button"
+              >
+                <Avatar className="size-10">
+                  <AvatarImage alt={userName} src={userImage || undefined} />
+                  <AvatarFallback>{getInitials(user?.name || null, userEmail)}</AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{userName}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{userEmail}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link className="flex items-center cursor-pointer" href="/dashboard/">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Perfil</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer text-red-600 focus:text-red-600"
+                onClick={handleLogout}
+                variant="destructive"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Cerrar sesión</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   )
