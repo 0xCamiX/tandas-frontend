@@ -72,7 +72,9 @@ test.describe('Authentication Flow', () => {
       await page.locator('button[type="submit"]').click()
 
       await expect(
-        page.locator('[data-sonner-toast]').or(page.getByText(/existe|duplicado|error/i)),
+        page.locator('[data-sonner-toast]').filter({
+          hasText: /Error de registro/i,
+        }),
       ).toBeVisible()
     })
 
