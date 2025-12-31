@@ -56,7 +56,6 @@ test.describe('Dashboard Flow', () => {
 
   test.describe('Progress Section UI', () => {
     test('displays progress card header', async ({ page }) => {
-      // Progress section is in a card, title is a div
       await expect(
         page
           .locator('main')
