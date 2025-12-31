@@ -1,7 +1,10 @@
+import path from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
 import dotenv from 'dotenv'
 
 dotenv.config()
+
+export const STORAGE_STATE = path.join(process.cwd(), '.auth/user.json')
 
 export default defineConfig({
   testDir: './__tests__/e2e',
@@ -13,8 +16,13 @@ export default defineConfig({
   use: {
     baseURL: process.env.NEXT_PUBLIC_URL,
     trace: 'on-first-retry',
+    storageState: STORAGE_STATE,
   },
   projects: [
+    {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts$/,
+    },
     {
       name: 'chromium',
       use: {
