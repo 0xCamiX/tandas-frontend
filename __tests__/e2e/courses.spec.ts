@@ -97,7 +97,30 @@ test.describe('Courses Flow', () => {
       ).toBeVisible()
     })
 
-    test('handles enrollment state', async ({ page }) => {
+    test('enrolls new user and redirects to first module', async ({ page, context }) => {
+      const uniqueEmail = `test-${Date.now()}@example.com`
+      const password = 'password123'
+
+      await context.clearCookies()
+      await page.goto('/signup')
+
+      await page.getByLabel(/nombre/i).fill('Test User')
+      await page.getByLabel(/correo electrónico/i).fill(uniqueEmail)
+      await page
+        .getByLabel(/contraseña/i)
+        .first()
+        .fill(password)
+      await page.locator('button[type="submit"]').click()
+
+      await expect(page).toHaveURL(/signin/)
+
+      await page.getByLabel(/correo electrónico/i).fill(uniqueEmail)
+      await page.getByLabel(/contraseña/i).fill(password)
+      await page.locator('button[type="submit"]').click()
+
+      await expect(page).toHaveURL(/dashboard/)
+
+      await page.goto('/dashboard/courses')
       await page
         .getByRole('link', {
           name: /ver curso/i,
@@ -105,16 +128,20 @@ test.describe('Courses Flow', () => {
         .first()
         .click()
 
-      const enrollBtn = page.getByRole('button', {
-        name: /inscribirme/i,
-      })
-      const continueBtn = page
-        .getByRole('link', {
-          name: /comenzar|ver módulos/i,
-        })
-        .or(page.getByText(/ya estás inscrito/i))
+      await expect(page).toHaveURL(/\/dashboard\/courses\/.+/)
 
-      await expect(enrollBtn.or(continueBtn)).toBeVisible()
+      const enrollBtn = page.getByRole('button', {
+        name: /inscribirme al curso/i,
+      })
+
+      await expect(enrollBtn).toBeVisible()
+      await enrollBtn.click()
+
+      await expect(page).toHaveURL(/\/dashboard\/courses\/.+\/.+/, {
+        timeout: 10000,
+      })
+
+      await expect(page.locator('main h1, main .text-3xl').first()).toBeVisible()
     })
   })
 })
