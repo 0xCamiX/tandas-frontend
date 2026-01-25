@@ -128,7 +128,9 @@ function ModuleNavigation({ courseId, prevModuleId, nextModuleId }: ModuleNaviga
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:w-full sm:justify-end">
         {prevModuleId && (
           <Link
+            aria-label="Anterior módulo"
             className="w-full sm:w-auto"
+            data-testid="prev-module-link"
             href={`/dashboard/courses/${courseId}/${prevModuleId}`}
           >
             <Button className="w-full sm:w-auto" size="sm" variant="outline">
@@ -141,7 +143,9 @@ function ModuleNavigation({ courseId, prevModuleId, nextModuleId }: ModuleNaviga
 
         {nextModuleId && (
           <Link
+            aria-label="Siguiente módulo"
             className="w-full sm:w-auto"
+            data-testid="next-module-link"
             href={`/dashboard/courses/${courseId}/${nextModuleId}`}
           >
             <Button className="w-full sm:w-auto" size="sm" variant="outline">

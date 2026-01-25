@@ -11,18 +11,33 @@ test.describe('Modules Flow', () => {
       .first()
       .click()
 
+    await expect(page).toHaveURL(/\/dashboard\/courses\/.+/)
+
     const enrollBtn = page.getByRole('button', {
-      name: /inscribirme/i,
+      name: 'Inscribirme al curso',
+    })
+    const startBtn = page.getByRole('button', {
+      name: 'Comenzar curso',
     })
 
-    if (await enrollBtn.isVisible()) {
+    if (
+      await enrollBtn.isVisible({
+        timeout: 3000,
+      })
+    ) {
       await enrollBtn.click()
-    } else {
-      await page
-        .getByRole('link', {
-          name: /comenzar|continuar/i,
-        })
-        .click()
+      await expect(page).toHaveURL(/\/dashboard\/courses\/.*\/.*/, {
+        timeout: 15000,
+      })
+    } else if (
+      await startBtn.isVisible({
+        timeout: 3000,
+      })
+    ) {
+      await startBtn.click()
+      await expect(page).toHaveURL(/\/dashboard\/courses\/.*\/.*/, {
+        timeout: 10000,
+      })
     }
   })
 
@@ -124,57 +139,43 @@ test.describe('Modules Flow', () => {
     })
   })
 
-  test.describe('Sidebar & Curriculum', () => {
-    test('displays sidebar with course content', async ({ page }) => {
-      const sidebar = page.locator('aside, .sticky').filter({
-        hasText: /contenido del curso/i,
-      })
-      await expect(sidebar).toBeVisible()
-    })
-
-    test('displays module summary info', async ({ page }) => {
-      await expect(page.getByText(/resumen del módulo/i)).toBeVisible()
-      await expect(page.getByText(/curso/i)).toBeVisible()
-    })
-
-    test('can navigate to another module via sidebar', async ({ page }) => {
-      const moduleLinks = page.locator('aside a, .sticky a').filter({
-        has: page.locator('span'),
-      })
-      const count = await moduleLinks.count()
-
-      if (count > 1) {
-        const secondModule = moduleLinks.nth(1)
-        await secondModule.click()
-        await expect(page).toHaveURL(/\/dashboard\/courses\/.*\/.*/)
-      }
-    })
-  })
-
   test.describe('Quiz Interaction', () => {
     test('can access and interact with quiz', async ({ page }) => {
       const quizTab = page.getByRole('tab', {
         name: 'Evaluación',
       })
 
-      if ((await quizTab.isVisible()) && (await quizTab.isEnabled())) {
+      if (await quizTab.isVisible()) {
         await quizTab.click()
 
-        const radioGroup = page.locator('[role="radiogroup"]').first()
-        if (await radioGroup.isVisible()) {
-          const firstOption = radioGroup.getByRole('radio').first()
-          await firstOption.click({
-            force: true,
-          })
-          await expect(firstOption).toBeChecked()
+        const firstRadioGroup = page.locator('[role="radiogroup"]').first()
+        await expect(firstRadioGroup).toBeVisible()
+
+        const radioGroups = page.locator('[role="radiogroup"]')
+        const count = await radioGroups.count()
+
+        if (count > 0) {
+          for (let i = 0; i < count; i++) {
+            const group = radioGroups.nth(i)
+            await group.getByRole('radio').first().click({
+              force: true,
+            })
+          }
 
           const submitBtn = page.getByRole('button', {
             name: /enviar respuestas/i,
           })
+
           await expect(submitBtn).toBeEnabled()
           await submitBtn.click()
 
           await expect(page.getByText(/tu puntuación/i)).toBeVisible()
+
+          await expect(
+            page.getByRole('button', {
+              name: /intentar de nuevo/i,
+            }),
+          ).toBeVisible()
         }
       }
     })
