@@ -1,4 +1,4 @@
-# Guía de Uso de la API - TANDAS Backend
+# Guía de Uso de la API - YAKU Backend
 
 Esta guía documenta cómo usar los endpoints de la API para los módulos de **Cursos**, **Inscripciones**, **Módulos** y **Quizzes** desde el frontend.
 

@@ -39,7 +39,6 @@ export async function registerUserAction(
   formData: FormData,
 ): Promise<FormState> {
   const fields = {
-    username: formData.get('username') as string,
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
@@ -52,7 +51,6 @@ export async function registerUserAction(
       success: false,
       message: 'Validation error',
       issues: {
-        username: flatErrors?.nested?.username,
         email: flatErrors?.nested?.email,
         password: flatErrors?.nested?.password,
       },
@@ -68,7 +66,6 @@ export async function registerUserAction(
   }
 
   const userData = {
-    username: validatedFields.output.username,
     email: validatedFields.output.email,
     password: validatedFields.output.password,
   }

@@ -1,4 +1,4 @@
-# 📹 Guía de Videos para TANDAS
+# 📹 Guía de Videos para YAKU
 
 ## 🎥 Soporte de YouTube (Recomendado)
 

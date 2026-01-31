@@ -16,7 +16,7 @@ export default function HomePage() {
                 Aprende sobre Pretratamiento de Agua en Casa
               </h2>
               <p className="text-xl text-muted-foreground mb-8">
-                TANDAS te guía paso a paso en el aprendizaje de técnicas efectivas para el
+                YAKU te guía paso a paso en el aprendizaje de técnicas efectivas para el
                 pretratamiento de agua a nivel domiciliario.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -90,7 +90,7 @@ export default function HomePage() {
         {/* Benefits Section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">¿Por qué elegir TANDAS?</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">¿Por qué elegir YAKU?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="flex items-start gap-4">
                 <div className="bg-primary/10 rounded-full p-2">
@@ -111,8 +111,8 @@ export default function HomePage() {
                 <div>
                   <h3 className="font-semibold mb-2">Para la comunidad</h3>
                   <p className="text-muted-foreground">
-                    TANDAS es una plataforma para la comunidad de aprendizaje gratuita y accesible
-                    por medio de la web.
+                    YAKU es una plataforma para la comunidad de aprendizaje gratuita y accesible por
+                    medio de la web.
                   </p>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function HomePage() {
                 <div>
                   <h3 className="font-semibold mb-2">Proyecto educativo</h3>
                   <p className="text-muted-foreground">
-                    TANDAS es un proyecto educativo que busca informar a la comunidad sobre los
+                    YAKU es un proyecto educativo que busca informar a la comunidad sobre los
                     métodos de pretratamiento de agua en el hogar.
                   </p>
                 </div>
@@ -137,7 +137,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6">¿Listo para comenzar tu aprendizaje?</h2>
             <p className="text-lg mb-8 max-w-2xl mx-auto">
-              Únete a TANDAS hoy y aprende los métodos de pretratamiento de agua en el hogar.
+              Únete a YAKU hoy y aprende los métodos de pretratamiento de agua en el hogar.
             </p>
             <Link href="/signup">
               <Button

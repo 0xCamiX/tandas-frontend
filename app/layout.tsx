@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 
 // biome-ignore lint/style/useComponentExportOnlyModules: <"Nextjs 16 convention for Metadata">
 export const metadata: Metadata = {
-  title: 'TANDAS',
+  title: 'YAKU',
   description:
     'Plataforma interactiva de aprendizaje de los métodos de pretratamiento de agua en el hogar',
 }
