@@ -14,9 +14,7 @@ export type CompleteModuleActionResult =
       errorCode?: string
     }
 
-export async function completeModuleAction(
-  moduleId: string,
-): Promise<CompleteModuleActionResult> {
+export async function completeModuleAction(moduleId: string): Promise<CompleteModuleActionResult> {
   try {
     const response = await completeModuleService(moduleId)
 

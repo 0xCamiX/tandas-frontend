@@ -3,13 +3,13 @@
 import { ArrowRight, CheckCircle2, Loader2, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { completeModuleAction } from '@/app/actions/module-completion'
+import { submitQuizAttemptAction } from '@/app/actions/quiz'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { completeModuleAction } from '@/app/actions/module-completion'
-import { submitQuizAttemptAction } from '@/app/actions/quiz'
 import type { QuizWithOptions } from '@/lib/types'
 
 type ModuleQuizTabProps = {
@@ -97,7 +97,8 @@ export function ModuleQuizTab({ quizzes, moduleId }: ModuleQuizTabProps) {
         setStatus({
           type: 'error',
           message:
-            completionResult.error ?? 'Guardamos tu evaluación pero no pudimos completar el módulo.',
+            completionResult.error ??
+            'Guardamos tu evaluación pero no pudimos completar el módulo.',
         })
         setIsSaving(false)
         return
@@ -110,7 +111,8 @@ export function ModuleQuizTab({ quizzes, moduleId }: ModuleQuizTabProps) {
     } else {
       setStatus({
         type: 'info',
-        message: 'Registramos tu intento. Revisa el contenido y vuelve a intentarlo cuando quieras.',
+        message:
+          'Registramos tu intento. Revisa el contenido y vuelve a intentarlo cuando quieras.',
       })
     }
 
@@ -164,7 +166,10 @@ export function ModuleQuizTab({ quizzes, moduleId }: ModuleQuizTabProps) {
           </div>
 
           {status && (
-            <div className={`rounded-md border p-3 text-sm ${statusStyles[status.type]}`} role={statusRole}>
+            <div
+              className={`rounded-md border p-3 text-sm ${statusStyles[status.type]}`}
+              role={statusRole}
+            >
               {status.message}
             </div>
           )}
@@ -265,7 +270,10 @@ export function ModuleQuizTab({ quizzes, moduleId }: ModuleQuizTabProps) {
         ))}
 
         {status && (
-          <div className={`rounded-md border p-3 text-sm ${statusStyles[status.type]}`} role={statusRole}>
+          <div
+            className={`rounded-md border p-3 text-sm ${statusStyles[status.type]}`}
+            role={statusRole}
+          >
             {status.message}
           </div>
         )}

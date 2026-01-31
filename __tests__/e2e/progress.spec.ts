@@ -12,9 +12,7 @@ test.describe('Progress Page', () => {
         name: /mi progreso/i,
       }),
     ).toBeVisible()
-    await expect(
-      page.getByText(/consulta tus avances en cada curso/i),
-    ).toBeVisible()
+    await expect(page.getByText(/consulta tus avances en cada curso/i)).toBeVisible()
   })
 
   test('displays all four stat cards', async ({ page }) => {
@@ -45,9 +43,7 @@ test.describe('Progress Page', () => {
   })
 
   test('validates stats cards content structure', async ({ page }) => {
-    await expect(
-      page.locator('main').getByText(/cursos en los que estás inscrito/i),
-    ).toBeVisible()
+    await expect(page.locator('main').getByText(/cursos en los que estás inscrito/i)).toBeVisible()
     await expect(page.locator('main').getByText(/cursos completados exitosamente/i)).toBeVisible()
     await expect(page.locator('main').getByText(/total de quizzes realizados/i)).toBeVisible()
     await expect(page.locator('main').getByText(/promedio de tus calificaciones/i)).toBeVisible()
@@ -62,9 +58,7 @@ test.describe('Progress Page', () => {
         })
         .first(),
     ).toBeVisible()
-    await expect(
-      page.locator('main').getByText(/revisa tu progreso en los cursos/i),
-    ).toBeVisible()
+    await expect(page.locator('main').getByText(/revisa tu progreso en los cursos/i)).toBeVisible()
   })
 
   test('shows progress content or empty state', async ({ page }) => {
