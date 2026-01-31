@@ -1,6 +1,6 @@
 'use client'
 
-import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState, useEffect, useId, useRef, useState } from 'react'
@@ -25,7 +25,6 @@ const INITIAL_STATE: FormState = {
   success: false,
   message: undefined,
   data: {
-    username: undefined,
     email: undefined,
     password: undefined,
   },
@@ -34,7 +33,6 @@ const INITIAL_STATE: FormState = {
     message: undefined,
   },
   issues: {
-    username: undefined,
     email: undefined,
     password: undefined,
   },
@@ -48,7 +46,6 @@ export function SignupForm({ callbackUrl }: SignupFormProps) {
   const [state, formAction] = useActionState(actions.auth.registerUserAction, INITIAL_STATE)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  const usernameId = useId()
   const emailId = useId()
   const passwordId = useId()
   const successToastShownRef = useRef(false)
@@ -98,23 +95,6 @@ export function SignupForm({ callbackUrl }: SignupFormProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium" htmlFor={usernameId}>
-                Nombre de usuario
-              </Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  className="pl-10"
-                  defaultValue={state.data?.username ?? ''}
-                  id={usernameId}
-                  name="username"
-                  placeholder="tu_usuario"
-                  type="text"
-                />
-              </div>
-              <FormError issues={state.issues?.username} />
-            </div>
             <div className="space-y-2">
               <Label className="text-sm font-medium" htmlFor={emailId}>
                 Correo electrónico

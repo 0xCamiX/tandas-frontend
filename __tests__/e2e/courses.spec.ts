@@ -104,7 +104,6 @@ test.describe('Courses Flow', () => {
       await context.clearCookies()
       await page.goto('/signup')
 
-      await page.getByLabel(/nombre/i).fill('Test User')
       await page.getByLabel(/correo electrónico/i).fill(uniqueEmail)
       await page
         .getByLabel(/contraseña/i)
