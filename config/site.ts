@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: 'TANDAS',
+  name: 'YAKU',
   description:
     'Plataforma interactiva de aprendizaje de los métodos de pretratamiento de agua en el hogar',
   landingNav: [
@@ -20,7 +20,7 @@ export const siteConfig = {
       href: '/',
     },
     {
-      title: 'Dashboard',
+      title: 'Panel de Control',
       href: '/dashboard',
     },
     {

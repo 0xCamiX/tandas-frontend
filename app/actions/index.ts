@@ -1,4 +1,12 @@
 import { loginUserAction, logoutAction, registerUserAction } from './auth'
+import {
+  changePasswordAction,
+  deleteUserAction,
+  forgotPasswordAction,
+  resetPasswordAction,
+  setPasswordAction,
+  updateUserNameAction,
+} from './auth-profile'
 import { enrollCourseAction } from './enrollment'
 import { completeModuleAction } from './module-completion'
 import { submitQuizAttemptAction } from './quiz'
@@ -9,6 +17,12 @@ export const actions = {
     registerUserAction,
     loginUserAction,
     logoutAction,
+    forgotPasswordAction,
+    resetPasswordAction,
+    changePasswordAction,
+    updateUserNameAction,
+    deleteUserAction,
+    setPasswordAction,
   },
   user: {
     getCurrentUserAction,

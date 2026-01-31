@@ -56,7 +56,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
         <Link className="flex items-center gap-2 hover:opacity-80 transition-opacity" href="/">
           <Icon className="text-primary" height="4" width="4" />
           <h1 className="bg-linear-to-b from-primary to-primary-foreground bg-clip-text text-2xl font-bold text-transparent">
-            TANDAS
+            YAKU
           </h1>
         </Link>
 
@@ -99,7 +99,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 <SheetTitle className="flex items-center gap-2">
                   <Icon className="text-primary" height="4" width="4" />
                   <span className="bg-linear-to-b from-primary to-primary-foreground bg-clip-text text-xl font-bold text-transparent">
-                    TANDAS
+                    YAKU
                   </span>
                 </SheetTitle>
               </SheetHeader>
@@ -170,7 +170,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
               <DropdownMenuItem asChild>
                 <Link className="flex items-center cursor-pointer" href="/dashboard/">
                   <User className="mr-2 h-4 w-4" />
-                  <span>Perfil</span>
+                  <span>Panel de Control</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

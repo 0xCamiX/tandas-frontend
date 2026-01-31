@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test'
 
 const TEST_USER = {
-  username: process.env.TEST_USERNAME as string,
   email: process.env.TEST_USER_EMAIL as string,
   password: process.env.TEST_USER_PASSWORD as string,
 }
@@ -9,7 +8,6 @@ const TEST_USER = {
 function generateUniqueUser() {
   const timestamp = Date.now()
   return {
-    username: `user${timestamp}`,
     email: `user${timestamp}@test.com`,
     password: 'securePass123',
   }
@@ -66,7 +64,6 @@ test.describe('Authentication Flow', () => {
     })
 
     test('shows error for duplicate registration', async ({ page }) => {
-      await page.getByLabel(/nombre de usuario/i).fill(TEST_USER.username)
       await page.getByLabel(/correo electrónico/i).fill(TEST_USER.email)
       await page.getByLabel(/contraseña/i).fill(TEST_USER.password)
       await page.locator('button[type="submit"]').click()
@@ -81,7 +78,6 @@ test.describe('Authentication Flow', () => {
     test('redirects to sign in after successful registration', async ({ page }) => {
       const newUser = generateUniqueUser()
 
-      await page.getByLabel(/nombre de usuario/i).fill(newUser.username)
       await page.getByLabel(/correo electrónico/i).fill(newUser.email)
       await page.getByLabel(/contraseña/i).fill(newUser.password)
       await page.locator('button[type="submit"]').click()
@@ -92,7 +88,6 @@ test.describe('Authentication Flow', () => {
     test('Sign in for new user', async ({ page }) => {
       const newUser = generateUniqueUser()
 
-      await page.getByLabel(/nombre de usuario/i).fill(newUser.username)
       await page.getByLabel(/correo electrónico/i).fill(newUser.email)
       await page.getByLabel(/contraseña/i).fill(newUser.password)
       await page.locator('button[type="submit"]').click()

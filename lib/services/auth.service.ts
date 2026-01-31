@@ -1,4 +1,5 @@
 import { apiClient } from '@/lib/api-client'
+import { getJWT } from '@/lib/auth'
 import type { LoginUserData, RegisterUserData, User } from '@/lib/types'
 
 export type RegisterResponse =
@@ -24,6 +25,19 @@ export type LoginResponse =
         user: User
         token: string
       }
+    }
+  | {
+      success: false
+      error: {
+        code: string
+        message: string
+      }
+    }
+
+export type AuthServiceResponse<T> =
+  | {
+      success: true
+      data: T
     }
   | {
       success: false
@@ -99,4 +113,126 @@ export async function loginUserService(userData: LoginUserData): Promise<LoginRe
   }
 
   return response as LoginResponse
+}
+
+export async function requestPasswordResetService(
+  email: string,
+): Promise<AuthServiceResponse<Record<string, unknown>>> {
+  return apiClient.post<Record<string, unknown>>('/api/auth/forget-password', {
+    body: {
+      email,
+    },
+    requiresAuth: false,
+  })
+}
+
+export async function resetPasswordService(
+  token: string,
+  newPassword: string,
+): Promise<AuthServiceResponse<Record<string, unknown>>> {
+  return apiClient.post<Record<string, unknown>>('/api/auth/reset-password', {
+    body: {
+      token,
+      newPassword,
+    },
+    requiresAuth: false,
+  })
+}
+
+export async function changePasswordService(
+  currentPassword: string,
+  newPassword: string,
+): Promise<AuthServiceResponse<Record<string, unknown>>> {
+  const jwt = await getJWT()
+
+  if (!jwt) {
+    return {
+      success: false,
+      error: {
+        code: 'NO_TOKEN',
+        message: 'No authentication token found',
+      },
+    }
+  }
+
+  return apiClient.post<Record<string, unknown>>('/api/auth/change-password', {
+    body: {
+      currentPassword,
+      newPassword,
+    },
+    requiresAuth: true,
+    jwt,
+  })
+}
+
+export async function updateUserNameService(
+  name: string,
+): Promise<AuthServiceResponse<Record<string, unknown>>> {
+  const jwt = await getJWT()
+
+  if (!jwt) {
+    return {
+      success: false,
+      error: {
+        code: 'NO_TOKEN',
+        message: 'No authentication token found',
+      },
+    }
+  }
+
+  return apiClient.post<Record<string, unknown>>('/api/auth/update-user', {
+    body: {
+      name,
+    },
+    requiresAuth: true,
+    jwt,
+  })
+}
+
+export async function deleteUserService(
+  password: string,
+): Promise<AuthServiceResponse<Record<string, unknown>>> {
+  const jwt = await getJWT()
+
+  if (!jwt) {
+    return {
+      success: false,
+      error: {
+        code: 'NO_TOKEN',
+        message: 'No authentication token found',
+      },
+    }
+  }
+
+  return apiClient.post<Record<string, unknown>>('/api/auth/delete-user', {
+    body: {
+      password,
+    },
+    requiresAuth: true,
+    jwt,
+  })
+}
+
+export async function setPasswordService(
+  newPassword: string,
+): Promise<AuthServiceResponse<Record<string, unknown>>> {
+  const jwt = await getJWT()
+
+  if (!jwt) {
+    return {
+      success: false,
+      error: {
+        code: 'NO_TOKEN',
+        message: 'No authentication token found',
+      },
+    }
+  }
+
+  return apiClient.post<Record<string, unknown>>('/api/auth/set-password', {
+    body: {
+      password: newPassword,
+    },
+    requiresAuth: true,
+    jwt,
+  })
 }

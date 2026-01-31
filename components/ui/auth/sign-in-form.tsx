@@ -133,6 +133,14 @@ export function SigninForm({ callbackUrl }: SigninFormProps) {
               </div>
               <FormError issues={state.issues?.password} />
             </div>
+            <div className="text-right">
+              <Link
+                className="text-sm font-medium text-primary hover:underline underline-offset-4 transition-colors"
+                href="/forgot-password"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col pt-2">
             <SubmitButton className="w-full">Iniciar Sesión</SubmitButton>

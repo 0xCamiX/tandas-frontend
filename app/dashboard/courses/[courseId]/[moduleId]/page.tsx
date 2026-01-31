@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: ModulePageProps): Promise<Met
       const module = moduleResponse.data
 
       return {
-        title: `${module.title} - ${course.title} | TANDAS`,
+        title: `${module.title} - ${course.title} | YAKU`,
         description:
           module.content
             ?.replace(/<[^>]*>/g, '')
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: ModulePageProps): Promise<Met
   }
 
   return {
-    title: 'Módulo | TANDAS',
+    title: 'Módulo | YAKU',
     description: 'Contenido del módulo de aprendizaje',
   }
 }
