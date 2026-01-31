@@ -68,7 +68,9 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       <div className="w-full max-w-md">
         <Card className="shadow-lg shadow-black/5 dark:shadow-black/20 border-0 bg-card/80 backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-2xl font-bold tracking-tight">Restablecer contraseña</CardTitle>
+            <CardTitle className="text-2xl font-bold tracking-tight">
+              Restablecer contraseña
+            </CardTitle>
             <CardDescription className="text-muted-foreground">
               El enlace de recuperación no es válido o ha expirado.
             </CardDescription>
@@ -142,10 +144,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
               <FormError issues={state.issues?.confirmPassword} />
             </div>
             {state.message && (
-              <p
-                className={cn('text-sm', statusTone)}
-                role={state.success ? 'status' : 'alert'}
-              >
+              <p className={cn('text-sm', statusTone)} role={state.success ? 'status' : 'alert'}>
                 {state.message}
               </p>
             )}

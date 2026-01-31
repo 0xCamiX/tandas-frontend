@@ -1,8 +1,4 @@
-import {
-  loginUserAction,
-  logoutAction,
-  registerUserAction,
-} from './auth'
+import { loginUserAction, logoutAction, registerUserAction } from './auth'
 import {
   changePasswordAction,
   deleteUserAction,

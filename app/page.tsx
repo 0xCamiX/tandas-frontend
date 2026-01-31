@@ -111,8 +111,8 @@ export default function HomePage() {
                 <div>
                   <h3 className="font-semibold mb-2">Para la comunidad</h3>
                   <p className="text-muted-foreground">
-                    YAKU es una plataforma para la comunidad de aprendizaje gratuita y accesible
-                    por medio de la web.
+                    YAKU es una plataforma para la comunidad de aprendizaje gratuita y accesible por
+                    medio de la web.
                   </p>
                 </div>
               </div>

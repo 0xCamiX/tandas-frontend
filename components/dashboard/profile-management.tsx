@@ -4,6 +4,8 @@ import { Lock, Trash2, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useActionState, useEffect, useId, useState } from 'react'
 import { actions } from '@/app/actions'
+import { FormError } from '@/components/ui/auth/form-error'
+import { SubmitButton } from '@/components/ui/auth/submit-button'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -14,8 +16,6 @@ import type {
   DeleteUserFormState,
   UpdateUserNameFormState,
 } from '@/validations/auth-profile'
-import { FormError } from '@/components/ui/auth/form-error'
-import { SubmitButton } from '@/components/ui/auth/submit-button'
 
 const UPDATE_NAME_INITIAL: UpdateUserNameFormState = {
   success: false,
@@ -205,10 +205,13 @@ export function ProfileManagement({ initialName }: ProfileManagementProps) {
               <FormError issues={passwordState.issues?.confirmPassword} />
             </div>
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-sm text-muted-foreground" htmlFor="show-passwords">
+              <label
+                className="flex items-center gap-2 text-sm text-muted-foreground"
+                htmlFor="show-passwords"
+              >
                 <input
                   checked={showPasswords}
-                  id="show-passwords"
+                  id={useId()}
                   onChange={() => setShowPasswords(!showPasswords)}
                   type="checkbox"
                 />
@@ -251,12 +254,7 @@ export function ProfileManagement({ initialName }: ProfileManagementProps) {
               <FormError issues={deleteState.issues?.password} />
             </div>
             <div className="flex items-start gap-2">
-              <input
-                className="mt-1"
-                id={deleteConfirmId}
-                name="confirmDelete"
-                type="checkbox"
-              />
+              <input className="mt-1" id={deleteConfirmId} name="confirmDelete" type="checkbox" />
               <Label className="text-sm font-medium leading-snug" htmlFor={deleteConfirmId}>
                 Entiendo que esta acción es permanente y eliminará mi cuenta.
               </Label>
