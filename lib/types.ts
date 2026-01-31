@@ -96,6 +96,15 @@ export type QuizWithOptions = Quiz & {
   options: QuizOption[]
 }
 
+export type QuizAttempt = {
+  id: string
+  quizId: string
+  userId: string
+  score: number | null
+  createdAt: string
+  updatedAt: string
+}
+
 export type Module = {
   id: string
   courseId: string
@@ -122,4 +131,13 @@ export type ModuleWithRelations = Module & {
   }
   quizzes: Quiz[]
   resources: ModuleResource[]
+}
+
+export type ModuleCompletion = {
+  id: string
+  moduleId: string
+  userId: string
+  completedAt: string
+  createdAt: string
+  updatedAt: string
 }
