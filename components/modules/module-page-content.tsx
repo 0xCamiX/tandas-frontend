@@ -266,7 +266,7 @@ function ModuleTabsSection({ module, quizzes }: ModuleTabsSectionProps) {
           </TabsContent>
 
           <TabsContent className="mt-6" value="quiz">
-            <ModuleQuizTab quizzes={quizzes} />
+            <ModuleQuizTab moduleId={module.id} quizzes={quizzes} />
           </TabsContent>
         </Tabs>
       </CardContent>

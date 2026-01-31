@@ -30,34 +30,38 @@ export function ProgressSection({ progress }: ProgressSectionProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {progress.map(course => (
-            <div className="space-y-2" key={course.courseId}>
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-lg">{course.courseTitle}</h3>
-                <span className="text-sm font-medium text-muted-foreground">
-                  {course.completedModules} / {course.totalModules} módulos
-                </span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2.5">
-                <div
-                  className="bg-primary h-2.5 rounded-full transition-all duration-300"
-                  style={{
-                    width: `${course.progress}%`,
-                  }}
-                />
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">
-                  {course.progress.toFixed(1)}% completado
-                </span>
-                {course.completedAt && (
-                  <span className="text-muted-foreground">
-                    Completado: {new Date(course.completedAt).toLocaleDateString('es-ES')}
+          {progress.map(course => {
+            const progressPercent = course.progress <= 1 ? course.progress * 100 : course.progress
+
+            return (
+              <div className="space-y-2" key={course.courseId}>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-lg">{course.courseTitle}</h3>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {course.completedModules} / {course.totalModules} módulos
                   </span>
-                )}
+                </div>
+                <div className="w-full bg-muted rounded-full h-2.5">
+                  <div
+                    className="bg-primary h-2.5 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${Math.min(progressPercent, 100)}%`,
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {progressPercent.toFixed(1)}% completado
+                  </span>
+                  {course.completedAt && (
+                    <span className="text-muted-foreground">
+                      Completado: {new Date(course.completedAt).toLocaleDateString('es-ES')}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </CardContent>
     </Card>

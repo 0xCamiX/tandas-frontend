@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Loader2, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -8,16 +8,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { completeModuleAction } from '@/app/actions/module-completion'
+import { submitQuizAttemptAction } from '@/app/actions/quiz'
 import type { QuizWithOptions } from '@/lib/types'
 
 type ModuleQuizTabProps = {
   quizzes: QuizWithOptions[]
+  moduleId: string
 }
 
-export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
+type StatusMessage = {
+  type: 'success' | 'error' | 'info'
+  message: string
+}
+
+export function ModuleQuizTab({ quizzes, moduleId }: ModuleQuizTabProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState<number | null>(null)
+  const [status, setStatus] = useState<StatusMessage | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
   if (quizzes.length === 0) {
     return (
@@ -34,8 +44,14 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
     }))
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (quizzes.length === 0) return
+
+    setIsSaving(true)
+    setStatus({
+      type: 'info',
+      message: 'Guardando tus respuestas, esto puede tardar unos segundos.',
+    })
 
     // Calcular puntuación
     let correctAnswers = 0
@@ -50,6 +66,54 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
     setScore(calculatedScore)
     setSubmitted(true)
 
+    const primaryQuizId = quizzes[0]?.id
+    const responses = quizzes.map(quiz => ({
+      quizOptionId: selectedAnswers[quiz.id],
+    }))
+
+    if (!primaryQuizId) {
+      setStatus({
+        type: 'error',
+        message: 'No pudimos guardar tu evaluación. Intenta nuevamente.',
+      })
+      setIsSaving(false)
+      return
+    }
+
+    const attemptResult = await submitQuizAttemptAction(primaryQuizId, responses)
+
+    if (!attemptResult.success) {
+      setStatus({
+        type: 'error',
+        message: attemptResult.error ?? 'No pudimos guardar tu evaluación. Intenta nuevamente.',
+      })
+      setIsSaving(false)
+      return
+    }
+
+    if (calculatedScore >= 70) {
+      const completionResult = await completeModuleAction(moduleId)
+      if (!completionResult.success) {
+        setStatus({
+          type: 'error',
+          message:
+            completionResult.error ?? 'Guardamos tu evaluación pero no pudimos completar el módulo.',
+        })
+        setIsSaving(false)
+        return
+      }
+
+      setStatus({
+        type: 'success',
+        message: completionResult.message,
+      })
+    } else {
+      setStatus({
+        type: 'info',
+        message: 'Registramos tu intento. Revisa el contenido y vuelve a intentarlo cuando quieras.',
+      })
+    }
+
     // Mostrar feedback con toast
     if (calculatedScore >= 70) {
       toast.success('¡Excelente trabajo!', {
@@ -60,9 +124,20 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
         description: `Tu puntuación es ${calculatedScore}%. Intenta nuevamente después de revisar el contenido.`,
       })
     }
+
+    setIsSaving(false)
   }
 
   const allAnswered = quizzes.every(quiz => selectedAnswers[quiz.id])
+  const submitDisabled = !allAnswered || isSaving
+
+  const statusStyles = {
+    success: 'border-green-200 bg-green-50 text-green-800',
+    error: 'border-red-200 bg-red-50 text-red-800',
+    info: 'border-blue-200 bg-blue-50 text-blue-800',
+  } as const
+
+  const statusRole = status?.type === 'error' ? 'alert' : 'status'
 
   if (submitted && score !== null) {
     return (
@@ -87,6 +162,12 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
               </div>
             )}
           </div>
+
+          {status && (
+            <div className={`rounded-md border p-3 text-sm ${statusStyles[status.type]}`} role={statusRole}>
+              {status.message}
+            </div>
+          )}
 
           <div className="space-y-6">
             {quizzes.map((quiz, index) => {
@@ -135,6 +216,7 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
                 setSelectedAnswers({})
                 setSubmitted(false)
                 setScore(null)
+                setStatus(null)
                 toast.info('Puedes intentarlo de nuevo', {
                   description: 'Lee cuidadosamente cada pregunta antes de responder.',
                 })
@@ -182,9 +264,24 @@ export function ModuleQuizTab({ quizzes }: ModuleQuizTabProps) {
           </div>
         ))}
 
-        <Button className="w-full" disabled={!allAnswered} onClick={handleSubmit}>
-          Enviar respuestas
-          <ArrowRight className="ml-2 h-4 w-4" />
+        {status && (
+          <div className={`rounded-md border p-3 text-sm ${statusStyles[status.type]}`} role={statusRole}>
+            {status.message}
+          </div>
+        )}
+
+        <Button className="w-full" disabled={submitDisabled} onClick={handleSubmit}>
+          {isSaving ? (
+            <>
+              Guardando respuestas
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            </>
+          ) : (
+            <>
+              Enviar respuestas
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </>
+          )}
         </Button>
       </CardContent>
     </Card>

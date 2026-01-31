@@ -7,6 +7,9 @@ type StatsCardsProps = {
 }
 
 export function StatsCards({ stats }: StatsCardsProps) {
+  const normalizePercent = (value: number) => (value <= 1 ? value * 100 : value)
+  const averageScore = normalizePercent(stats.averageQuizScore)
+
   const statsData = [
     {
       title: 'Inscripciones',
@@ -34,7 +37,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
     },
     {
       title: 'Puntuación Promedio',
-      value: `${stats.averageQuizScore.toFixed(1)}%`,
+      value: `${averageScore.toFixed(1)}%`,
       description: 'Promedio de tus calificaciones',
       icon: TrendingUp,
       color: 'bg-purple-500',
