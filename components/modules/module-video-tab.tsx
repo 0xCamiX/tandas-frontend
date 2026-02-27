@@ -56,6 +56,11 @@ export function ModuleVideoTab({ module }: ModuleVideoTabProps) {
       <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black">
         <ReactPlayer controls height="100%" onError={handleError} src={videoUrl} width="100%" />
       </div>
+      {module.authorNote && (
+        <p className="text-sm text-muted-foreground">
+          <span className="font-medium">Autor del video:</span> {module.authorNote}
+        </p>
+      )}
 
       {/* Video Info */}
       <div className="rounded-lg border bg-card p-4">
