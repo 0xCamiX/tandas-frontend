@@ -110,6 +110,7 @@ export type Module = {
   title: string
   content: string | null
   videoUrl: string | null
+  authorNote: string | null
   order: number
   duration: number | null
   createdAt: string
